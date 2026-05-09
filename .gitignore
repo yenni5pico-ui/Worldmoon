@@ -1,0 +1,6 @@
+worldmoon.db
+__pycache__
+.venv
+.idea
+.idea/
+*.pyc
