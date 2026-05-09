@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Moon | Login</title>
+    <style>
+        :root { --espacio-profundo: #050514; --nebula-oscura: #0f0e2a; --luna-plata: #e2e2e2; --estrella-dorada: #ffd369; --polvo-cosmico: #7b68ee; --rojo: #ef4444; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+        body { background: var(--espacio-profundo); color: var(--luna-plata); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .login-box { background: var(--nebula-oscura); border: 1px solid rgba(123,104,238,0.3); border-radius: 12px; padding: 40px; width: 350px; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
+        .login-box h1 { color: var(--estrella-dorada); text-align: center; margin-bottom: 30px; font-size: 1.5rem; letter-spacing: 3px; text-transform: uppercase; }
+        .login-box input { width: 100%; padding: 12px; margin-bottom: 15px; background: var(--espacio-profundo); border: 1px solid rgba(123,104,238,0.3); border-radius: 6px; color: var(--luna-plata); font-size: 0.95rem; }
+        .login-box input::placeholder { color: #555; }
+        .login-box button { width: 100%; padding: 12px; background: var(--estrella-dorada); color: var(--espacio-profundo); border: none; border-radius: 6px; font-weight: bold; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: all 0.3s; }
+        .login-box button:hover { box-shadow: 0 0 15px rgba(255,211,105,0.4); }
+        .error-msg { background: rgba(239,68,68,0.15); border: 1px solid var(--rojo); color: var(--rojo); padding: 10px; border-radius: 6px; margin-bottom: 15px; text-align: center; font-size: 0.85rem; }
+        .login-box a { display: block; text-align: center; margin-top: 15px; color: var(--polvo-cosmico); text-decoration: none; font-size: 0.85rem; }
+        .login-box a:hover { color: var(--estrella-dorada); }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h1>🌙 CRM Login</h1>
+        {% if error %}
+        <div class="error-msg">❌ Usuario o contraseña incorrectos</div>
+        {% endif %}
+        <form method="POST">
+            <input type="text" name="usuario" placeholder="👤 Usuario" required>
+            <input type="password" name="password" placeholder="🔒 Contraseña" required>
+            <button type="submit">Entrar</button>
+        </form>
+        <a href="/">← Volver a la tienda</a>
+    </div>
+</body>
+</html>
