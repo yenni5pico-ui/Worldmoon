@@ -2,6 +2,8 @@ import os
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 import sqlite3
 from werkzeug.utils import secure_filename
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_mail import Mail, Message
 
 app = Flask(__name__)
 app.secret_key = 'worldmoon2025'
@@ -11,8 +13,13 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'worldmoonsudaderas16@gmail.com'
+app.config['MAIL_PASSWORD'] = 'bvxisonhgrifteye'  # ¡NO OLVIDES PONERLA!
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+mail = Mail(app)
 
 
 def allowed_file(filename):
@@ -29,80 +36,28 @@ def init_db():
     conn = get_db()
     cursor = conn.cursor()
 
-    cursor.execute('''CREATE TABLE IF NOT EXISTS pedidos
-                      (
-                          id
-                          INTEGER
-                          PRIMARY
-                          KEY
-                          AUTOINCREMENT,
-                          nombre
-                          TEXT,
-                          email
-                          TEXT,
-                          telefono
-                          TEXT,
-                          productos
-                          TEXT,
-                          total
-                          REAL,
-                          estado
-                          TEXT
-                          DEFAULT
-                          'Pendiente',
-                          metodo_pago
-                          TEXT
-                          DEFAULT
-                          'Efectivo',
-                          direccion
-                          TEXT
-                          DEFAULT
-                          '',
-                          delivery
-                          TEXT
-                          DEFAULT
-                          'Recoger en tienda',
-                          fecha
-                          TIMESTAMP
-                          DEFAULT
-                          CURRENT_TIMESTAMP
-                      )''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS usuarios
+                      (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, email TEXT UNIQUE, password TEXT, telefono TEXT, direccion TEXT)''')
 
+    cursor.execute('''CREATE TABLE IF NOT EXISTS pedidos
+                      (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, email TEXT, telefono TEXT, productos TEXT, total REAL, estado TEXT DEFAULT 'Pendiente', metodo_pago TEXT DEFAULT 'Efectivo', direccion TEXT DEFAULT '', delivery TEXT DEFAULT 'Recoger en tienda', usuario_id INTEGER, comprobante TEXT DEFAULT '', tlf_pago TEXT DEFAULT '', fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP)''')
+    # NUEVO: Agregada columna 'vendidos'
     cursor.execute('''CREATE TABLE IF NOT EXISTS productos
-                      (
-                          id
-                          INTEGER
-                          PRIMARY
-                          KEY
-                          AUTOINCREMENT,
-                          nombre
-                          TEXT,
-                          genero
-                          TEXT,
-                          precio
-                          REAL,
-                          stock
-                          INTEGER
-                          DEFAULT
-                          10,
-                          imagen
-                          TEXT,
-                          tallas
-                          TEXT
-                      )''')
+                      (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, genero TEXT, precio REAL, stock INTEGER DEFAULT 10, imagen TEXT, tallas TEXT, vendidos INTEGER DEFAULT 0)''')
 
     cursor.execute('SELECT COUNT(*) FROM productos')
     if cursor.fetchone()[0] == 0:
         cursor.executemany(
-            'INSERT INTO productos (nombre, genero, precio, stock, imagen, tallas) VALUES (?, ?, ?, ?, ?, ?)', [
-                ('Sudadera Clásica', 'Dama', 2.50, 15,
-                 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=500&q=80', 'Única'),
-                ('Sudadera Deportiva', 'Dama', 2.50, 10,
-                 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500&q=80', 'S,M,L'),
-                ('Sudadera Urban', 'Caballero', 2.50, 12,
-                 'https://images.unsplash.com/photo-1578768079052-aa76e52ff62e?w=500&q=80', 'M,L,Plus'),
-                ('Sudadera Premium', 'Caballero', 3.50, 8,
-                 'https://images.unsplash.com/photo-1611312449412-6cefac5dc3e4?w=500&q=80', 'L,Plus')
+            'INSERT INTO productos (nombre, genero, precio, stock, imagen, tallas, vendidos) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [
+                ('Sudadera Deportiva', 'Dama', 2.50, 15,
+                 'https://i.postimg.cc/J7YYpqnK/Captura-de-pantalla-2026-05-08-190239.png', 'Única', 0),
+                ('Sudadera Deportiva', 'Caballero', 2.50, 12,
+                 'https://i.postimg.cc/sXybRgd0/Captura-de-pantalla-2026-05-08-190417.png', 'S,M,L', 0),
+                ('Sudadera', 'Caballero', 3.50, 8,
+                 'https://i.postimg.cc/PJ04TSvr/D-NQ-NP-2X-888323-MLV53886753290-022023-F.webp', 'Plus', 0),
+                ('Sudadera Deportiva', 'Niños', 2.00, 20,
+                 'https://i.postimg.cc/9XPZMF3m/Captura-de-pantalla-2026-05-16-000114.png', '6-8,10-12', 0)
             ])
 
     conn.commit()
@@ -125,32 +80,112 @@ def api_productos():
     return jsonify([dict(p) for p in productos])
 
 
-@app.route('/checkout', methods=['POST'])
-def checkout():
+@app.route('/api/registro', methods=['POST'])
+def api_registro():
     data = request.get_json()
     try:
+        hashed_pw = generate_password_hash(data['password'], method='pbkdf2:sha256')
         conn = get_db()
-        conn.execute(
-            'INSERT INTO pedidos (nombre, email, telefono, productos, total, metodo_pago, direccion, delivery) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-            (data.get('nombre'), data.get('email'), data.get('telefono'), data.get('productos'), data.get('total'),
-             data.get('metodo_pago', 'Efectivo'), data.get('direccion', ''), data.get('delivery', 'Recoger en tienda')))
+        conn.execute('INSERT INTO usuarios (nombre, email, password, telefono, direccion) VALUES (?, ?, ?, ?, ?)',
+                     (data['nombre'], data['email'], hashed_pw, data.get('telefono', ''), data.get('direccion', '')))
         conn.commit()
+        user = conn.execute('SELECT * FROM usuarios WHERE email = ?', (data['email'],)).fetchone()
         conn.close()
-        return jsonify({'success': True})
+        session['cliente_id'] = user['id']
+        session['cliente_nombre'] = user['nombre']
+        return jsonify({'success': True, 'nombre': user['nombre']})
+    except sqlite3.IntegrityError:
+        return jsonify({'success': False, 'error': 'El correo ya está registrado'}), 400
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
 
 
+@app.route('/api/login', methods=['POST'])
+def api_login():
+    data = request.get_json()
+    conn = get_db()
+    user = conn.execute('SELECT * FROM usuarios WHERE email = ?', (data['email'],)).fetchone()
+    conn.close()
+    if user and check_password_hash(user['password'], data['password']):
+        session['cliente_id'] = user['id']
+        session['cliente_nombre'] = user['nombre']
+        return jsonify({'success': True, 'nombre': user['nombre']})
+    else:
+        return jsonify({'success': False, 'error': 'Correo o contraseña incorrectos'}), 401
+
+
+@app.route('/api/logout')
+def api_logout():
+    session.pop('cliente_id', None)
+    session.pop('cliente_nombre', None)
+    return jsonify({'success': True})
+
+
+@app.route('/api/check_session')
+def check_session():
+    if 'cliente_id' in session:
+        return jsonify({'logged_in': True, 'nombre': session['cliente_nombre']})
+    return jsonify({'logged_in': False})
+
+
+@app.route('/checkout', methods=['POST'])
+def checkout():
+    if 'cliente_id' not in session:
+        return jsonify({'success': False, 'error': 'Debes iniciar sesión'}), 403
+
+    data = request.get_json()
+    try:
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute(
+            'INSERT INTO pedidos (nombre, email, telefono, productos, total, metodo_pago, direccion, delivery, usuario_id, comprobante, tlf_pago) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            (data.get('nombre'), data.get('email'), data.get('telefono'), data.get('productos'), data.get('total'),
+             data.get('metodo_pago', 'Efectivo'), data.get('direccion', ''), data.get('delivery', 'Recoger en tienda'),
+             session['cliente_id'], data.get('comprobante', ''), data.get('tlf_pago', '')))
+        conn.commit()
+        pedido_id = cursor.lastrowid
+
+        items = data.get('items_detalle', [])
+        for item in items:
+            prod_id = item.get('id')
+            qty = item.get('cantidad')
+            cursor.execute('UPDATE productos SET stock = stock - ?, vendidos = vendidos + ? WHERE id = ?',
+                           (qty, qty, prod_id))
+        conn.commit()
+        conn.close()
+
+        try:
+            msg_cliente = Message(f"World Moon - Pedido #{pedido_id} Confirmado 🚀", sender='worldmoon16@gmail.com',
+                                  recipients=[data.get('email')])
+            msg_cliente.html = f"<h2 style='color:#9d4edd;'>¡Hola {data.get('nombre')}! 🌌</h2><p>Tu pedido ha sido registrado.</p><ul><li><strong>Productos:</strong> {data.get('productos')}</li><li><strong>Total:</strong> ${data.get('total')}</li></ul>"
+            mail.send(msg_cliente)
+            msg_admin = Message(f"🚨 Nuevo Pedido Web #{pedido_id}", sender='worldmoon16@gmail.com',
+                                recipients=['worldmoon16@gmail.com'])
+            msg_admin.html = f"<h2>Nuevo Pedido</h2><p><strong>Cliente:</strong> {data.get('nombre')} (${data.get('total')})</p>"
+            mail.send(msg_admin)
+        except Exception as e:
+            print("Error enviando correo: ", e)
+
+        comp_text = f"\n📄 *Comprobante:* {data.get('comprobante')}\n📱 *Tlf Origen:* {data.get('tlf_pago')}" if data.get(
+            'metodo_pago') == 'Pago Movil' else ""
+        mensaje_wa = f"Hola World Moon! 🌙 Pedido #{pedido_id}:\n👤 *Nombre:* {data.get('nombre')}\n📦 *Productos:* {data.get('productos')}\n💰 *Total:* ${data.get('total')}{comp_text}"
+        numero_wa = '584126023833'
+        whatsapp_url = f'https://wa.me/{numero_wa}?text={mensaje_wa}'
+
+        return jsonify({'success': True, 'whatsapp_url': whatsapp_url})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+# --- RUTAS DE ADMINISTRACIÓN ---
+
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
-        usuario = request.form.get('usuario')
-        password = request.form.get('password')
-        if usuario == 'admin' and password == 'worldmoon2025':
+        if request.form.get('usuario') == 'admin' and request.form.get('password') == 'worldmoon2025':
             session['admin'] = True
             return redirect('/admin')
-        else:
-            return render_template('admin_login.html', error=True)
+        return render_template('admin_login.html', error=True)
     return render_template('admin_login.html')
 
 
@@ -162,107 +197,105 @@ def admin_logout():
 
 @app.route('/admin')
 def admin():
-    if not session.get('admin'):
-        return redirect('/admin/login')
+    if not session.get('admin'): return redirect('/admin/login')
 
     conn = get_db()
     pedidos = conn.execute('SELECT * FROM pedidos ORDER BY fecha DESC').fetchall()
-    productos = conn.execute('SELECT * FROM productos').fetchall()
+    productos = conn.execute('SELECT * FROM productos ORDER BY vendidos DESC').fetchall()
 
     total_pedidos = conn.execute('SELECT COUNT(*) as c FROM pedidos').fetchone()['c']
     total_ventas = conn.execute('SELECT COALESCE(SUM(total), 0) as s FROM pedidos').fetchone()['s']
     pendientes = conn.execute("SELECT COUNT(*) as c FROM pedidos WHERE estado='Pendiente'").fetchone()['c']
     completados = conn.execute("SELECT COUNT(*) as c FROM pedidos WHERE estado='Completado'").fetchone()['c']
 
+    # NUEVAS MÉTRICAS CRM
+    top_productos = conn.execute(
+        'SELECT nombre, vendidos FROM productos WHERE vendidos > 0 ORDER BY vendidos DESC LIMIT 3').fetchall()
+    clientes_frecuentes = conn.execute(
+        'SELECT nombre, email, COUNT(id) as compras, SUM(total) as total_gastado FROM pedidos GROUP BY email ORDER BY compras DESC LIMIT 3').fetchall()
+
     conn.close()
     return render_template('admin.html', pedidos=pedidos, productos=productos,
                            total_pedidos=total_pedidos, total_ventas=total_ventas,
-                           pendientes=pendientes, completados=completados)
+                           pendientes=pendientes, completados=completados,
+                           top_productos=top_productos, clientes_frecuentes=clientes_frecuentes)
 
 
 @app.route('/admin/actualizar_estado/<int:pedido_id>', methods=['POST'])
 def actualizar_estado(pedido_id):
-    if not session.get('admin'):
-        return jsonify({'success': False}), 403
-    estado = request.form.get('estado')
+    if not session.get('admin'): return jsonify({'success': False}), 403
     conn = get_db()
-    conn.execute('UPDATE pedidos SET estado=? WHERE id=?', (estado, pedido_id))
-    conn.commit()
+    conn.execute('UPDATE pedidos SET estado=? WHERE id=?', (request.form.get('estado'), pedido_id))
+    conn.commit();
     conn.close()
+    return jsonify({'success': True})
+
+
+# NUEVO: Reabastecer inventario
+@app.route('/admin/restock/<int:producto_id>', methods=['POST'])
+def restock(producto_id):
+    if not session.get('admin'): return jsonify({'success': False}), 403
+    cantidad = int(request.form.get('cantidad', 0))
+    if cantidad > 0:
+        conn = get_db()
+        conn.execute('UPDATE productos SET stock = stock + ? WHERE id=?', (cantidad, producto_id))
+        conn.commit();
+        conn.close()
     return jsonify({'success': True})
 
 
 @app.route('/admin/upload', methods=['POST'])
 def upload_file():
-    if not session.get('admin'):
-        return jsonify({'success': False}), 403
-    if 'file' not in request.files:
-        return jsonify({'success': False, 'error': 'No se seleccionó archivo'})
+    if not session.get('admin'): return jsonify({'success': False}), 403
+    if 'file' not in request.files: return jsonify({'success': False, 'error': 'No file'})
     file = request.files['file']
-    if file.filename == '':
-        return jsonify({'success': False, 'error': 'No se seleccionó archivo'})
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(filepath)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         return jsonify({'success': True, 'url': '/static/images/' + filename})
-    return jsonify({'success': False, 'error': 'Tipo de archivo no permitido'})
+    return jsonify({'success': False, 'error': 'Invalid file'})
 
 
 @app.route('/admin/agregar_producto', methods=['POST'])
 def agregar_producto():
-    if not session.get('admin'):
-        return jsonify({'success': False}), 403
-    nombre = request.form.get('nombre')
-    genero = request.form.get('genero')
-    precio = request.form.get('precio')
-    stock = request.form.get('stock')
-    imagen = request.form.get('imagen', 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=500&q=80')
-    tallas = request.form.get('tallas', 'Única')
+    if not session.get('admin'): return jsonify({'success': False}), 403
     conn = get_db()
     conn.execute('INSERT INTO productos (nombre, genero, precio, stock, imagen, tallas) VALUES (?, ?, ?, ?, ?, ?)',
-                 (nombre, genero, float(precio), int(stock), imagen, tallas))
-    conn.commit()
+                 (request.form.get('nombre'), request.form.get('genero'), float(request.form.get('precio')),
+                  int(request.form.get('stock')), request.form.get('imagen', ''), request.form.get('tallas', 'Única')))
+    conn.commit();
     conn.close()
     return jsonify({'success': True})
 
 
 @app.route('/admin/editar_producto/<int:producto_id>', methods=['POST'])
 def editar_producto(producto_id):
-    if not session.get('admin'):
-        return jsonify({'success': False}), 403
-    nombre = request.form.get('nombre')
-    genero = request.form.get('genero')
-    precio = request.form.get('precio')
-    stock = request.form.get('stock')
-    imagen = request.form.get('imagen')
-    tallas = request.form.get('tallas')
+    if not session.get('admin'): return jsonify({'success': False}), 403
     conn = get_db()
     conn.execute('UPDATE productos SET nombre=?, genero=?, precio=?, stock=?, imagen=?, tallas=? WHERE id=?',
-                 (nombre, genero, float(precio), int(stock), imagen, tallas, producto_id))
-    conn.commit()
+                 (request.form.get('nombre'), request.form.get('genero'), float(request.form.get('precio')),
+                  int(request.form.get('stock')), request.form.get('imagen'), request.form.get('tallas'), producto_id))
+    conn.commit();
     conn.close()
     return jsonify({'success': True})
 
 
 @app.route('/admin/eliminar_producto/<int:producto_id>', methods=['POST'])
 def eliminar_producto(producto_id):
-    if not session.get('admin'):
-        return jsonify({'success': False}), 403
-    conn = get_db()
-    conn.execute('DELETE FROM productos WHERE id=?', (producto_id,))
-    conn.commit()
+    if not session.get('admin'): return jsonify({'success': False}), 403
+    conn = get_db();
+    conn.execute('DELETE FROM productos WHERE id=?', (producto_id,));
+    conn.commit();
     conn.close()
     return jsonify({'success': True})
 
 
 @app.route('/admin/eliminar_pedido/<int:pedido_id>', methods=['POST'])
 def eliminar_pedido(pedido_id):
-    if not session.get('admin'):
-        return jsonify({'success': False}), 403
-    conn = get_db()
-    conn.execute('DELETE FROM pedidos WHERE id=?', (pedido_id,))
-    conn.commit()
+    if not session.get('admin'): return jsonify({'success': False}), 403
+    conn = get_db();
+    conn.execute('DELETE FROM pedidos WHERE id=?', (pedido_id,));
+    conn.commit();
     conn.close()
     return jsonify({'success': True})
 
