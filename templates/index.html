@@ -17,18 +17,17 @@
 
     <style>
         :root {
-            --negro-profundo: #030014;       /* Fondo principal */
-            --azul-galactico: #0b0f2e;       /* Fondos secundarios, nav, tarjetas */
-            --purpura-nebulosa: #9d4edd;      /* Color principal de acción (botones, títulos) */
-            --purpura-nebulosa-oscuro: #7b2ff7; /* Para resplandores (glow) intensos */
-            --azul-galactico-brillante: #00e5ff; /* Detalles tecnológicos, separadores, hover */
-            --blanco-estelar: #f0f8ff;        /* Texto principal */
+            --negro-profundo: #030014;
+            --azul-galactico: #0b0f2e;
+            --purpura-nebulosa: #9d4edd;
+            --purpura-nebulosa-oscuro: #7b2ff7;
+            --azul-galactico-brillante: #00e5ff;
+            --blanco-estelar: #f0f8ff;
             --admin-bg: #1a1a35;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Exo 2', Roboto, Helvetica, Arial, sans-serif; scroll-behavior: smooth; }
         body { background-color: var(--negro-profundo); color: var(--blanco-estelar); line-height: 1.6; }
 
-        /* APLICANDO FUENTE ORBITRON A TÍTULOS Y LOGO */
         h1, h2, h3, .logo, .titulo-seccion, .carrito-header h2 { font-family: 'Orbitron', sans-serif; }
 
         nav { background-color: rgba(11,15,46,0.9); backdrop-filter: blur(10px); position: fixed; width: 100%; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; border-bottom: 1px solid rgba(0,229,255,0.2); box-shadow: 0 0 15px rgba(0,229,255,0.1); }
@@ -132,7 +131,6 @@
         .btn-cerrar-modal { position: absolute; top: 15px; right: 20px; font-size: 2rem; color: var(--blanco-estelar); background: none; border: none; cursor: pointer; transition: color 0.3s; }
         .btn-cerrar-modal:hover { color: var(--azul-galactico-brillante); text-shadow: 0 0 10px rgba(0,229,255,0.6); }
 
-        /* ESTILOS PARA LOGIN Y REGISTRO */
         .auth-tabs { display: flex; margin-bottom: 25px; border-bottom: 1px solid rgba(0,229,255,0.2); }
         .auth-tab { flex: 1; text-align: center; padding: 10px; color: #8888aa; cursor: pointer; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; transition: all 0.3s; border-bottom: 2px solid transparent; }
         .auth-tab.activo { color: var(--purpura-nebulosa); border-bottom-color: var(--purpura-nebulosa); }
@@ -162,7 +160,6 @@
         .btn-confirmar-compra { width: 100%; padding: 14px; background: var(--purpura-nebulosa); color: var(--blanco-estelar); border: none; border-radius: 12px; font-size: 1rem; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: all 0.3s; box-shadow: 0 0 10px var(--purpura-nebulosa-oscuro); }
         .btn-confirmar-compra:hover { box-shadow: 0 0 30px var(--purpura-nebulosa-oscuro); }
 
-        /* CAJA DE INSTRUCCIONES DE PAGO */
         .pago-instrucciones-box { background: var(--negro-profundo); border: 1px solid var(--azul-galactico-brillante); border-radius: 12px; padding: 20px; margin-bottom: 15px; display: none; box-shadow: 0 0 15px rgba(0,229,255,0.15); }
         .pago-instrucciones-box.visible { display: block; }
         .pago-dato { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0,229,255,0.1); font-size: 0.9rem; }
@@ -233,7 +230,6 @@
             <button class="enlace-nav" id="btn-nav-contacto">Contacto</button>
             <button class="btn-nav-catalogo" id="btn-nav-catalogo">Ver Catálogo</button>
 
-            <!-- Área de Autenticación en Nav -->
             <span class="user-welcome" id="user-welcome" style="display:none;"></span>
             <button class="btn-nav-auth" id="btn-nav-auth">Ingresar</button>
 
@@ -872,11 +868,6 @@
 
         renderizarCarrito();
     </script>
-        var nav=document.querySelector('nav');
-        window.addEventListener('scroll',function(){nav.style.backgroundColor=window.scrollY>50?'rgba(3,0,20,0.95)':'rgba(11,15,46,0.9)';nav.style.boxShadow=window.scrollY>50?'0 2px 15px rgba(0,229,255,0.2)':'0 0 15px rgba(0,229,255,0.1)';});
-
-        renderizarCarrito();
-    </script>
 
     <!-- 📱 NUEVO: REGISTRAR SERVICE WORKER PARA QUE SEA UNA APP -->
     <script>
@@ -890,5 +881,6 @@
         });
       }
     </script>
+
 </body>
 </html>
