@@ -11,6 +11,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700&family=Orbitron:wght@400;600;700;900&display=swap" rel="stylesheet">
     <!-- 📱 LIBRERÍA QR CODE -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+     <!-- 📱 NUEVO: CONFIGURACIÓN PARA APP MÓVIL (PWA) -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#9d4edd">
 
     <style>
         :root {
@@ -868,6 +871,24 @@
         window.addEventListener('scroll',function(){nav.style.backgroundColor=window.scrollY>50?'rgba(3,0,20,0.95)':'rgba(11,15,46,0.9)';nav.style.boxShadow=window.scrollY>50?'0 2px 15px rgba(0,229,255,0.2)':'0 0 15px rgba(0,229,255,0.1)';});
 
         renderizarCarrito();
+    </script>
+        var nav=document.querySelector('nav');
+        window.addEventListener('scroll',function(){nav.style.backgroundColor=window.scrollY>50?'rgba(3,0,20,0.95)':'rgba(11,15,46,0.9)';nav.style.boxShadow=window.scrollY>50?'0 2px 15px rgba(0,229,255,0.2)':'0 0 15px rgba(0,229,255,0.1)';});
+
+        renderizarCarrito();
+    </script>
+
+    <!-- 📱 NUEVO: REGISTRAR SERVICE WORKER PARA QUE SEA UNA APP -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/sw.js').then(function(registration) {
+            console.log('App instalada exitosamente');
+          }, function(err) {
+            console.log('Error al instalar App: ', err);
+          });
+        });
+      }
     </script>
 </body>
 </html>

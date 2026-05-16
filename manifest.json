@@ -1,0 +1,23 @@
+{
+  "name": "World Moon Tienda",
+  "short_name": "World Moon",
+  "description": "Sudaderas con alma de luna y calor de mundo",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#030014",
+  "theme_color": "#9d4edd",
+  "icons": [
+    {
+      "src": "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=192&q=80",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=512&q=80",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

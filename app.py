@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, jsonify, session, redirect, url_for
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_file  # NUEVO: send_file
 import sqlite3
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -13,10 +13,11 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+# Configuración de Gmail (Recuerda poner tu contraseña de aplicación)
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'worldmoonsudaderas16@gmail.com'
-app.config['MAIL_PASSWORD'] = 'bvxisonhgrifteye'  # ¡NO OLVIDES PONERLA!
+app.config['MAIL_USERNAME'] = 'worldmoon16@gmail.com'
+app.config['MAIL_PASSWORD'] = 'TU_CONTRASEÑA_DE_APLICACION_AQUI'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
@@ -41,6 +42,7 @@ def init_db():
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS pedidos
                       (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, email TEXT, telefono TEXT, productos TEXT, total REAL, estado TEXT DEFAULT 'Pendiente', metodo_pago TEXT DEFAULT 'Efectivo', direccion TEXT DEFAULT '', delivery TEXT DEFAULT 'Recoger en tienda', usuario_id INTEGER, comprobante TEXT DEFAULT '', tlf_pago TEXT DEFAULT '', fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP)''')
+
     # NUEVO: Agregada columna 'vendidos'
     cursor.execute('''CREATE TABLE IF NOT EXISTS productos
                       (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, genero TEXT, precio REAL, stock INTEGER DEFAULT 10, imagen TEXT, tallas TEXT, vendidos INTEGER DEFAULT 0)''')
@@ -50,14 +52,16 @@ def init_db():
         cursor.executemany(
             'INSERT INTO productos (nombre, genero, precio, stock, imagen, tallas, vendidos) VALUES (?, ?, ?, ?, ?, ?, ?)',
             [
-                ('Sudadera Deportiva', 'Dama', 2.50, 15,
-                 'https://i.postimg.cc/J7YYpqnK/Captura-de-pantalla-2026-05-08-190239.png', 'Única', 0),
-                ('Sudadera Deportiva', 'Caballero', 2.50, 12,
-                 'https://i.postimg.cc/sXybRgd0/Captura-de-pantalla-2026-05-08-190417.png', 'S,M,L', 0),
-                ('Sudadera', 'Caballero', 3.50, 8,
-                 'https://i.postimg.cc/PJ04TSvr/D-NQ-NP-2X-888323-MLV53886753290-022023-F.webp', 'Plus', 0),
-                ('Sudadera Deportiva', 'Niños', 2.00, 20,
-                 'https://i.postimg.cc/9XPZMF3m/Captura-de-pantalla-2026-05-16-000114.png', '6-8,10-12', 0)
+                ('Sudadera Clásica', 'Dama', 2.50, 15,
+                 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=500&q=80', 'Única', 0),
+                ('Sudadera Deportiva', 'Dama', 2.50, 10,
+                 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500&q=80', 'S,M,L', 0),
+                ('Sudadera Urban', 'Caballero', 2.50, 12,
+                 'https://images.unsplash.com/photo-1578768079052-aa76e52ff62e?w=500&q=80', 'M,L,Plus', 0),
+                ('Sudadera Premium', 'Caballero', 3.50, 8,
+                 'https://images.unsplash.com/photo-1611312449412-6cefac5dc3e4?w=500&q=80', 'L,Plus', 0),
+                ('Sudadera Galáctica', 'Niños', 2.00, 20,
+                 'https://images.unsplash.com/photo-1503944583220-79d8926ad5e2?w=500&q=80', '2-4,6-8,10-12', 0)
             ])
 
     conn.commit()
@@ -71,6 +75,19 @@ init_db()
 def index():
     return render_template('index.html')
 
+
+# NUEVAS RUTAS PARA LA APP MÓVIL (PWA)
+@app.route('/manifest.json')
+def manifest():
+    return send_file('manifest.json', mimetype='application/json')
+
+
+@app.route('/sw.js')
+def sw():
+    return send_file('sw.js', mimetype='application/javascript')
+
+
+# FIN RUTAS PWA
 
 @app.route('/api/productos')
 def api_productos():
@@ -169,7 +186,7 @@ def checkout():
         comp_text = f"\n📄 *Comprobante:* {data.get('comprobante')}\n📱 *Tlf Origen:* {data.get('tlf_pago')}" if data.get(
             'metodo_pago') == 'Pago Movil' else ""
         mensaje_wa = f"Hola World Moon! 🌙 Pedido #{pedido_id}:\n👤 *Nombre:* {data.get('nombre')}\n📦 *Productos:* {data.get('productos')}\n💰 *Total:* ${data.get('total')}{comp_text}"
-        numero_wa = '584126023833'
+        numero_wa = '584126653899'
         whatsapp_url = f'https://wa.me/{numero_wa}?text={mensaje_wa}'
 
         return jsonify({'success': True, 'whatsapp_url': whatsapp_url})
@@ -208,7 +225,6 @@ def admin():
     pendientes = conn.execute("SELECT COUNT(*) as c FROM pedidos WHERE estado='Pendiente'").fetchone()['c']
     completados = conn.execute("SELECT COUNT(*) as c FROM pedidos WHERE estado='Completado'").fetchone()['c']
 
-    # NUEVAS MÉTRICAS CRM
     top_productos = conn.execute(
         'SELECT nombre, vendidos FROM productos WHERE vendidos > 0 ORDER BY vendidos DESC LIMIT 3').fetchall()
     clientes_frecuentes = conn.execute(
@@ -231,7 +247,6 @@ def actualizar_estado(pedido_id):
     return jsonify({'success': True})
 
 
-# NUEVO: Reabastecer inventario
 @app.route('/admin/restock/<int:producto_id>', methods=['POST'])
 def restock(producto_id):
     if not session.get('admin'): return jsonify({'success': False}), 403
