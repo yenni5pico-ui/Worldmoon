@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_file  # NUEVO: send_file
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 import sqlite3
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -75,19 +75,6 @@ init_db()
 def index():
     return render_template('index.html')
 
-
-# NUEVAS RUTAS PARA LA APP MÓVIL (PWA)
-@app.route('/manifest.json')
-def manifest():
-    return send_file('manifest.json', mimetype='application/json')
-
-
-@app.route('/sw.js')
-def sw():
-    return send_file('sw.js', mimetype='application/javascript')
-
-
-# FIN RUTAS PWA
 
 @app.route('/api/productos')
 def api_productos():
