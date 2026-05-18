@@ -59,7 +59,7 @@ def init_db():
             'INSERT INTO productos (nombre, genero, precio, stock, imagen, tallas, vendidos) VALUES (?, ?, ?, ?, ?, ?, ?)',
             [
                 ('Sudadera Deportiva', 'Dama', 2.50, 15,
-                 'https://https://i.postimg.cc/FF2Z4vLP/Captura-de-pantalla-2026-05-08-190239.png', 'Única', 0),
+                 'https://i.postimg.cc/FF2Z4vLP/Captura-de-pantalla-2026-05-08-190239.png', 'Única', 0),
                 ('Sudadera Urban', 'Caballero', 2.50, 12,
                  'https://i.postimg.cc/sxS5XBhh/Captura-de-pantalla-2026-05-08-190417.png', 'S,M,L', 0),
                 ('Sudadera PLUS', 'Caballero', 3.50, 8,
