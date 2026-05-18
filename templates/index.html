@@ -278,7 +278,7 @@
                     <h3>📍 Contacto</h3>
                     <p>📍 Avenida Principal de El Cementerio, Parroquia Santa Rosalía, Caracas, Venezuela</p>
                     <p>📞 04126023833</p>
-                    <p>✉️ worldmoonsudaderas16@gmail.com</p>
+                    <p>✉️worldmoonsudaderas16@gmail.com</p>
                     <p>🕐 Lunes a Sábado: 9am - 8pm</p>
                 </div>
             </div>
@@ -408,7 +408,7 @@
                     <h3 style="color:var(--purpura-nebulosa); font-size:1rem; margin-bottom:10px;">💳 Pago con Punto de Venta</h3>
                     <div class="pos-opciones">
                         <p>Si seleccionas este método, el cobro se realizará de forma presencial:</p>
-                        <div class="pago-monto" id="pago-monto-pos"><small>Total a pagar (USD)</small>$0.00</div>
+                        <div class="pago-monto" id="pago-monto-pos"><small>Total a pagar (USD)</small>0.00$</div>
                         <p><strong>📦 Si eliges Delivery:</strong> Nuestro repartidor llevará el punto de venta. Ten tu tarjeta de débito o crédito lista al momento de recibir tu pedido.</p>
                         <p><strong>🏪 Si recoges en tienda:</strong> Puedes pasar tu tarjeta directamente en nuestro local al momento de retirar tu compra.</p>
                         <p style="margin-top:15px; text-align:center; font-size:0.8rem; color:var(--azul-galactico-brillante);">No necesitas realizar ninguna acción de pago ahora. ¡Solo confirma tu pedido!</p>
@@ -422,7 +422,7 @@
                         <p>Envía el monto exacto en dólares (USD) a la siguiente cuenta Zelle:</p>
                         <div class="pago-dato"><span>Titular:</span><span>World Moon C.A</span></div>
                         <div class="pago-dato"><span>Email Zelle:</span><span>worldmoon16@gmail.com</span></div>
-                        <div class="pago-monto" id="pago-monto-zelle"><small>Monto a pagar (USD)</small>$0.00</div>
+                        <div class="pago-monto" id="pago-monto-zelle"><small>Monto a pagar (USD)</small>0.0$</div>
                         <p style="text-align:center; font-size:0.8rem; color:var(--azul-galactico-brillante);">Luego de enviar, compártenos el capture por WhatsApp.</p>
                     </div>
                 </div>
@@ -440,14 +440,13 @@
                         <option value="Efectivo">💵 Efectivo (Presencial / Depósito)</option>
                         <option value="Pago Movil">📱 Pago Móvil (QR)</option>
                         <option value="Punto de Venta">💳 Punto de Venta (Delivery)</option>
-                        <option value="Zelle">🇺🇸 Zelle (Internacional)</option>
                     </select>
 
                     <select id="checkout-delivery" required onchange="calcularTotalYMostrarPago()">
                         <option value="">🚚 Método de entrega</option>
                         <option value="Recoger en tienda">🏪 Recoger en tienda</option>
-                        <option value="Delivery local">🚗 Delivery local (+$2.00)</option>
-                        <option value="Delivery foráneo">🚚 Delivery foráneo (+$5.00)</option>
+                        <option value="Delivery local">🚗 Delivery local (+2.00$)</option>
+                        <option value="Delivery foráneo">🚚 Delivery foráneo (+5.00$)</option>
                     </select>
                     <input type="text" id="checkout-direccion" placeholder="🏠 Dirección (si es delivery)">
                 </div>
@@ -483,7 +482,7 @@
             <button class="btn-cerrar-modal" onclick="cerrarModal('modal-envios')">&times;</button>
             <h2>Política de Envíos</h2>
             <h3>Tiempos de entrega</h3><p>Caracas: 1 día hábil. Resto del país: 3-5 días hábiles.</p>
-            <h3>Costos de envío</h3><p>Recoger en tienda. Delivery local: $2.00. Delivery foráneo: $5.00.</p>
+            <h3>Costos de envío</h3><p>Recoger en tienda. Delivery local: 2.00$. Delivery foráneo: 5.00$.</p>
             <h3>Seguimiento</h3><p>Al confirmar tu pedido recibirás un número de guía por WhatsApp o correo electrónico para rastrear tu envío.</p>
         </div>
     </div>
@@ -500,7 +499,7 @@
         </div>
     </div>
 
-    <a href="https://wa.me/584125658899?text=Hola%20World%20Moon!%20Quiero%20info%20sobre%20las%20sudaderas" target="_blank" class="whatsapp-btn">💬</a>
+    <a href="https://wa.me/584126023833?text=Hola%20World%20Moon!%20Quiero%20info%20sobre%20las%20sudaderas" target="_blank" class="whatsapp-btn">💬</a>
 
     <div class="toast" id="toast"></div>
 
@@ -618,7 +617,7 @@
                 html+='<div class="producto-info">';
                 html+='<div><span class="genero">'+p.genero+'</span><h3>'+p.nombre+'</h3></div>';
                 html+='<div class="tallas-opciones">'+tallasHTML+'</div>';
-                html+='<p class="precio">$'+p.precio.toFixed(2)+'</p>';
+                html+='<p class="precio">USD$'+p.precio.toFixed(2)+'</p>';
                 html+='<button class="btn-agregar" data-id="'+p.id+'" data-nombre="'+p.nombre+'" data-precio="'+p.precio+'" data-img="'+p.imagen+'" data-genero="'+p.genero+'">Agregar al Carrito</button>';
                 html+='</div></article>';
             });
@@ -713,7 +712,7 @@
                 document.getElementById('pago-movil-info').style.display = 'block';
                 var qrContainer = document.getElementById('qrcode-container');
                 qrContainer.innerHTML = '';
-                var textoQR = "Pago Movil World Moon\nBanco: Banco de Venezuela\nCI: V-12345678\nTlf: 04126653899\nMonto: $" + totalFinal.toFixed(2);
+                var textoQR = "Pago Movil World Moon\nBanco: Banco de Venezuela\nCI: V-23714719\nTlf: 04126023833\nMonto: $" + totalFinal.toFixed(2);
                 new QRCode(qrContainer, {
                     text: textoQR,
                     width: 120,

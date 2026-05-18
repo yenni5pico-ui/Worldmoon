@@ -58,7 +58,7 @@
         .modal-activo { display: flex; }
         .modal-box { background: var(--nebula-oscura); border: 1px solid var(--polvo-cosmico); border-radius: 8px; padding: 30px; max-width: 450px; width: 100%; }
         .modal-box h3 { color: var(--estrella-dorada); margin-bottom: 20px; text-transform: uppercase; }
-        .modal-box input { width: 100%; padding: 10px; margin-bottom: 15px; background: var(--espacio-profundo); border: 1px solid rgba(123,104,238,0.3); color: white; border-radius: 4px; }
+        .modal-box input, .modal-box select { width: 100%; padding: 10px; margin-bottom: 15px; background: var(--espacio-profundo); border: 1px solid rgba(123,104,238,0.3); color: white; border-radius: 4px; }
         .modal-box button { padding: 10px; width: 100%; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
         .btn-guardar { background: var(--verde); color: white; }
         .btn-cancelar { background: transparent; border: 1px solid #333 !important; color: #888; margin-top: 10px; }
@@ -85,7 +85,7 @@
 
         <div class="stats-grid">
             <div class="stat-card"><div class="stat-numero">{{ total_pedidos }}</div><div class="stat-label">Total Pedidos</div></div>
-            <div class="stat-card"><div class="stat-numero">${{ "%.2f"|format(total_ventas) }}</div><div class="stat-label">Ventas Totales</div></div>
+            <div class="stat-card"><div class="stat-numero">USD${{ "%.2f"|format(total_ventas) }}</div><div class="stat-label">Ventas Totales</div></div>
             <div class="stat-card"><div class="stat-numero">{{ pendientes }}</div><div class="stat-label">Pendientes</div></div>
             <div class="stat-card"><div class="stat-numero">{{ completados }}</div><div class="stat-label">Completados</div></div>
         </div>
@@ -105,7 +105,7 @@
                     <h4>🌟 Clientes Frecuentes</h4>
                     {% if clientes_frecuentes %}
                         {% for c in clientes_frecuentes %}
-                            <div class="crm-item"><strong>{{ c.nombre }}</strong> ({{ c.compras }} compras / ${{ "%.2f"|format(c.total_gastado) }})</div>
+                            <div class="crm-item"><strong>{{ c.nombre }}</strong> ({{ c.compras }} compras / USD${{ "%.2f"|format(c.total_gastado) }})</div>
                         {% endfor %}
                     {% else %} <div class="crm-item">Aún no hay clientes.</div> {% endif %}
                 </div>
@@ -124,7 +124,7 @@
                         <td>{{ pedido.nombre }}</td>
                         <td>{{ pedido.email }}<br><small style="color:#8888aa">{{ pedido.telefono }}</small></td>
                         <td style="max-width:180px;font-size:0.8rem;color:#8888aa">{{ pedido.productos }}</td>
-                        <td><strong style="color:var(--estrella-dorada)">${{ "%.2f"|format(pedido.total) }}</strong></td>
+                        <td><strong style="color:var(--estrella-dorada)">USD${{ "%.2f"|format(pedido.total) }}</strong></td>
                         <td>
                             <select class="select-estado" onchange="actualizarEstado({{ pedido.id }}, this.value)" style="background:var(--espacio-profundo);color:var(--luna-plata);border:1px solid var(--polvo-cosmico);padding:5px;border-radius:4px;">
                                 <option value="Pendiente" {% if pedido.estado=='Pendiente' %}selected{% endif %}>⏳ Pendiente</option>
@@ -146,13 +146,10 @@
                 <div class="form-grid">
                     <input type="text" id="prod-nombre" placeholder="Nombre" required>
                     <select id="prod-genero" required><option value="Dama">Dama</option><option value="Caballero">Caballero</option><option value="Niños">Niños</option></select>
-                    <input type="number" id="prod-precio" placeholder="Precio $" step="0.01" required>
+                    <input type="number" id="prod-precio" placeholder="Precio USD$" step="0.01" required>
                     <input type="number" id="prod-stock" placeholder="Stock Inicial" value="10">
                     <input type="text" id="prod-tallas" placeholder="Tallas (S,M,L)" value="Única">
-
-                    <!-- NUEVO: Input para URL de imagen (Permanente en la nube) -->
                     <input type="url" id="prod-imagen" placeholder="URL de imagen (Imgur/Unsplash)" required>
-
                     <div class="upload-area">
                         <label class="btn-upload" id="btn-upload-add" for="file-add">📷 O sube foto (temporal)</label>
                         <input type="file" id="file-add" accept="image/*" onchange="subirArchivo(this,'add')">
@@ -171,12 +168,12 @@
                         <td><img src="{{ producto.imagen }}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;" onerror="this.src='https://via.placeholder.com/40'"></td>
                         <td>{{ producto.nombre }}</td>
                         <td><span class="badge {% if producto.genero=='Dama' %}badge-dama{% else %}badge-caballero{% endif %}">{{ producto.genero }}</span></td>
-                        <td style="color:var(--estrella-dorada)">${{ "%.2f"|format(producto.precio) }}</td>
+                        <td style="color:var(--estrella-dorada)">USD${{ "%.2f"|format(producto.precio) }}</td>
                         <td style="{% if producto.stock <= 2 %} color:var(--rojo); font-weight:bold; {% endif %}">{{ producto.stock }} {% if producto.stock <= 2 %}⚠️{% endif %}</td>
                         <td style="color:var(--verde)">{{ producto.vendidos }}</td>
                         <td>
                             <button class="btn-admin btn-restock" onclick="reabastecer({{ producto.id }}, '{{ producto.nombre }}')">➕ Reabastecer</button>
-                            <button class="btn-admin btn-editar" onclick="abrirEditar({{ producto.id }}, '{{ producto.nombre }}', '{{ producto.genero }}', {{ producto.precio }}, {{ producto.stock }}, '{{ producto.tallas }}', '{{ producto.imagen }}')">✏️</button>
+                            <button class="btn-admin btn-editar" onclick="abrirEditar({{ producto.id }}, '{{ producto.nombre }}', '{{ producto.genero }}', {{ producto.precio }}, {{ producto.stock }}, '{{ producto.tallas }}', '{{ producto.imagen }}')">✏️ Editar</button>
                             <button class="btn-admin btn-eliminar" onclick="eliminarProducto({{ producto.id }})">🗑️</button>
                         </td>
                     </tr>
@@ -197,6 +194,28 @@
             <input type="hidden" id="restock-id">
             <button class="btn-guardar" onclick="guardarRestock()">💾 Sumar al Inventario</button>
             <button class="btn-cancelar" onclick="document.getElementById('modal-restock').classList.remove('modal-activo')">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- MODAL EDITAR PRODUCTO (NUEVO) -->
+    <div class="modal-overlay" id="modal-editar">
+        <div class="modal-box">
+            <h3>✏️ Editar Producto</h3>
+            <input type="hidden" id="edit-id">
+            <label style="font-size:0.8rem; color:#8888aa;">Nombre</label>
+            <input type="text" id="edit-nombre" required>
+            <label style="font-size:0.8rem; color:#8888aa;">Género</label>
+            <select id="edit-genero" required><option value="Dama">Dama</option><option value="Caballero">Caballero</option><option value="Niños">Niños</option></select>
+            <label style="font-size:0.8rem; color:#8888aa;">Precio (USD$)</label>
+            <input type="number" id="edit-precio" step="0.01" required>
+            <label style="font-size:0.8rem; color:#8888aa;">Stock</label>
+            <input type="number" id="edit-stock" required>
+            <label style="font-size:0.8rem; color:#8888aa;">Tallas</label>
+            <input type="text" id="edit-tallas">
+            <label style="font-size:0.8rem; color:#8888aa;">URL de Imagen</label>
+            <input type="url" id="edit-imagen">
+            <button class="btn-guardar" onclick="guardarEdicion()">💾 Guardar Cambios</button>
+            <button class="btn-cancelar" onclick="document.getElementById('modal-editar').classList.remove('modal-activo')">Cancelar</button>
         </div>
     </div>
 
@@ -223,6 +242,34 @@
             if(cant <= 0) { alert('Ingresa una cantidad válida'); return; }
             fetch('/admin/restock/'+id, {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:'cantidad='+cant})
             .then(r=>r.json()).then(d=>{ if(d.success) location.reload(); });
+        }
+
+        // NUEVAS FUNCIONES PARA EDITAR
+        function abrirEditar(id, nombre, genero, precio, stock, tallas, imagen) {
+            document.getElementById('edit-id').value = id;
+            document.getElementById('edit-nombre').value = nombre;
+            document.getElementById('edit-genero').value = genero;
+            document.getElementById('edit-precio').value = precio;
+            document.getElementById('edit-stock').value = stock;
+            document.getElementById('edit-tallas').value = tallas;
+            document.getElementById('edit-imagen').value = imagen;
+            document.getElementById('modal-editar').classList.add('modal-activo');
+        }
+
+        function guardarEdicion() {
+            var id = document.getElementById('edit-id').value;
+            var n = document.getElementById('edit-nombre').value;
+            var g = document.getElementById('edit-genero').value;
+            var p = document.getElementById('edit-precio').value;
+            var s = document.getElementById('edit-stock').value;
+            var t = document.getElementById('edit-tallas').value;
+            var im = document.getElementById('edit-imagen').value;
+
+            fetch('/admin/editar_producto/'+id, {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:'nombre='+encodeURIComponent(n)+'&genero='+g+'&precio='+p+'&stock='+s+'&tallas='+encodeURIComponent(t)+'&imagen='+encodeURIComponent(im)})
+            .then(r=>r.json()).then(d=>{
+                if(d.success) location.reload();
+                else alert('Error al guardar');
+            });
         }
     </script>
 </body>
