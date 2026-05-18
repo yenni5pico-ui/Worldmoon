@@ -58,16 +58,14 @@ def init_db():
         cursor.executemany(
             'INSERT INTO productos (nombre, genero, precio, stock, imagen, tallas, vendidos) VALUES (?, ?, ?, ?, ?, ?, ?)',
             [
-                ('Sudadera Clásica', 'Dama', 2.50, 15,
-                 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=500&q=80', 'Única', 0),
-                ('Sudadera Deportiva', 'Dama', 2.50, 10,
-                 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500&q=80', 'S,M,L', 0),
+                ('Sudadera Deportiva', 'Dama', 2.50, 15,
+                 'https://https://i.postimg.cc/FF2Z4vLP/Captura-de-pantalla-2026-05-08-190239.png', 'Única', 0),
                 ('Sudadera Urban', 'Caballero', 2.50, 12,
-                 'https://images.unsplash.com/photo-1578768079052-aa76e52ff62e?w=500&q=80', 'M,L,Plus', 0),
-                ('Sudadera Premium', 'Caballero', 3.50, 8,
-                 'https://images.unsplash.com/photo-1611312449412-6cefac5dc3e4?w=500&q=80', 'L,Plus', 0),
+                 'https://i.postimg.cc/sxS5XBhh/Captura-de-pantalla-2026-05-08-190417.png', 'S,M,L', 0),
+                ('Sudadera PLUS', 'Caballero', 3.50, 8,
+                 'https://i.postimg.cc/9QcymQFS/talla-plus.webp', 'Plus', 0),
                 ('Sudadera Galáctica', 'Niños', 2.00, 20,
-                 'https://images.unsplash.com/photo-1503944583220-79d8926ad5e2?w=500&q=80', '2-4,6-8,10-12', 0)
+                 'https://i.postimg.cc/8PSZvDz5/Gemini-Generated-Image-3u57sz3u57sz3u57-(2).png', '2-4,6-8,10-12', 0)
             ])
 
     conn.commit()
@@ -111,7 +109,7 @@ def api_registro():
             msg_bienvenida.html = f"<h2 style='color:#9d4edd;'>¡Hola {data['nombre']}! 🌌</h2>" \
                                   f"<p>Te damos la bienvenida oficial a <strong>World Moon</strong>. Estamos felices de que te unas a nuestra comunidad cósmica.</p>" \
                                   f"<p>Ya puedes explorar nuestro catálogo, elegir tus sudaderas favoritas y realizar tus pedidos fácilmente.</p>" \
-                                  f"<p>🚀 <a href='https://tu-pagina-web.com' style='color:#00e5ff;'>Visita nuestra tienda</a></p>" \
+                                  f"<p>🚀 <a href='https://worldmoon.pythonanywhere.com/' style='color:#00e5ff;'>Visita nuestra tienda</a></p>" \
                                   f"<p>Con cariño,<br>El equipo de World Moon 🌙</p>"
             mail.send(msg_bienvenida)
         except Exception as e:
@@ -119,7 +117,7 @@ def api_registro():
 
         # --- NUEVO: GENERAR LINK DE WHATSAPP DE BIENVENIDA ---
         mensaje_wa = f"Hola World Moon! 🌙 Soy {data['nombre']}, acabo de registrarme en su tienda web. ¡Quiero recibir sus novedades!"
-        numero_wa = '584126653899' # Asegúrate de que este sea tu número real
+        numero_wa = '584126023833' # Asegúrate de que este sea tu número real
         whatsapp_url = f'https://wa.me/{numero_wa}?text={mensaje_wa}'
 
         return jsonify({'success': True, 'nombre': user['nombre'], 'whatsapp_url': whatsapp_url})
@@ -184,12 +182,12 @@ def checkout():
         conn.close()
 
         try:
-            msg_cliente = Message(f"World Moon - Pedido #{pedido_id} Confirmado 🚀", sender='worldmoon16@gmail.com',
+            msg_cliente = Message(f"World Moon - Pedido #{pedido_id} Confirmado 🚀", sender='worldmoonsudaderas16@gmail.com',
                                   recipients=[data.get('email')])
             msg_cliente.html = f"<h2 style='color:#9d4edd;'>¡Hola {data.get('nombre')}! 🌌</h2><p>Tu pedido ha sido registrado.</p><ul><li><strong>Productos:</strong> {data.get('productos')}</li><li><strong>Total:</strong> ${data.get('total')}</li></ul>"
             mail.send(msg_cliente)
-            msg_admin = Message(f"🚨 Nuevo Pedido Web #{pedido_id}", sender='worldmoon16@gmail.com',
-                                recipients=['worldmoon16@gmail.com'])
+            msg_admin = Message(f"🚨 Nuevo Pedido Web #{pedido_id}", sender='worldmoonsudaderas16@gmail.com',
+                                recipients=['worldmoonsudaderas16@gmail.com'])
             msg_admin.html = f"<h2>Nuevo Pedido</h2><p><strong>Cliente:</strong> {data.get('nombre')} (${data.get('total')})</p>"
             mail.send(msg_admin)
         except Exception as e:
