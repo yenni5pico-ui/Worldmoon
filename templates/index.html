@@ -617,7 +617,7 @@
                 html+='<div class="producto-info">';
                 html+='<div><span class="genero">'+p.genero+'</span><h3>'+p.nombre+'</h3></div>';
                 html+='<div class="tallas-opciones">'+tallasHTML+'</div>';
-                html+='<p class="precio">USD$'+p.precio.toFixed(2)+'</p>';
+                html+='<p class="precio">'+p.precio.toFixed(2)+'$</p>';
                 html+='<button class="btn-agregar" data-id="'+p.id+'" data-nombre="'+p.nombre+'" data-precio="'+p.precio+'" data-img="'+p.imagen+'" data-genero="'+p.genero+'">Agregar al Carrito</button>';
                 html+='</div></article>';
             });

@@ -168,7 +168,7 @@
                         <td><img src="{{ producto.imagen }}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;" onerror="this.src='https://via.placeholder.com/40'"></td>
                         <td>{{ producto.nombre }}</td>
                         <td><span class="badge {% if producto.genero=='Dama' %}badge-dama{% else %}badge-caballero{% endif %}">{{ producto.genero }}</span></td>
-                        <td style="color:var(--estrella-dorada)">USD${{ "%.2f"|format(producto.precio) }}</td>
+                        <td style="color:var(--estrella-dorada)">{{ "%.2f"|format(producto.precio) }}$</td>
                         <td style="{% if producto.stock <= 2 %} color:var(--rojo); font-weight:bold; {% endif %}">{{ producto.stock }} {% if producto.stock <= 2 %}⚠️{% endif %}</td>
                         <td style="color:var(--verde)">{{ producto.vendidos }}</td>
                         <td>
