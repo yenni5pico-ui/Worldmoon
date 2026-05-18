@@ -4,20 +4,26 @@ import sqlite3
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_mail import Mail, Message
+from dotenv import load_dotenv # NUEVO: Importa el lector de contraseñas
+
+# NUEVO: Carga las contraseñas del archivo .env
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = 'worldmoon2025'
+
+# NUEVO: Lee las contraseñas de la caja fuerte, si no las encuentra usa un valor por defecto
+app.secret_key = os.environ.get('SECRET_KEY', 'clave_por_defecto_no_segura')
 DB_NAME = 'worldmoon.db'
 UPLOAD_FOLDER = 'static/images'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Configuración de Gmail (Recuerda poner tu contraseña de aplicación)
+# Configuración de Gmail (Ahora seguro, lee la contraseña del .env)
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'worldmoon16@gmail.com'
-app.config['MAIL_PASSWORD'] = 'TU_CONTRASEÑA_DE_APLICACION_AQUI'
+app.config['MAIL_USERNAME'] = 'worldmoonsudadera16@gmail.com'
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD') # NUEVO: Lee la contraseña segura
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
@@ -97,7 +103,26 @@ def api_registro():
         conn.close()
         session['cliente_id'] = user['id']
         session['cliente_nombre'] = user['nombre']
-        return jsonify({'success': True, 'nombre': user['nombre']})
+
+        # --- NUEVO: ENVIAR CORREO DE BIENVENIDA ---
+        try:
+            msg_bienvenida = Message("🎉 ¡Bienvenido a World Moon!", sender='worldmoon16@gmail.com',
+                                  recipients=[data['email']])
+            msg_bienvenida.html = f"<h2 style='color:#9d4edd;'>¡Hola {data['nombre']}! 🌌</h2>" \
+                                  f"<p>Te damos la bienvenida oficial a <strong>World Moon</strong>. Estamos felices de que te unas a nuestra comunidad cósmica.</p>" \
+                                  f"<p>Ya puedes explorar nuestro catálogo, elegir tus sudaderas favoritas y realizar tus pedidos fácilmente.</p>" \
+                                  f"<p>🚀 <a href='https://tu-pagina-web.com' style='color:#00e5ff;'>Visita nuestra tienda</a></p>" \
+                                  f"<p>Con cariño,<br>El equipo de World Moon 🌙</p>"
+            mail.send(msg_bienvenida)
+        except Exception as e:
+            print("Error enviando correo de bienvenida: ", e)
+
+        # --- NUEVO: GENERAR LINK DE WHATSAPP DE BIENVENIDA ---
+        mensaje_wa = f"Hola World Moon! 🌙 Soy {data['nombre']}, acabo de registrarme en su tienda web. ¡Quiero recibir sus novedades!"
+        numero_wa = '584126653899' # Asegúrate de que este sea tu número real
+        whatsapp_url = f'https://wa.me/{numero_wa}?text={mensaje_wa}'
+
+        return jsonify({'success': True, 'nombre': user['nombre'], 'whatsapp_url': whatsapp_url})
     except sqlite3.IntegrityError:
         return jsonify({'success': False, 'error': 'El correo ya está registrado'}), 400
     except Exception as e:
@@ -186,7 +211,9 @@ def checkout():
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
-        if request.form.get('usuario') == 'admin' and request.form.get('password') == 'worldmoon2025':
+        # NUEVO: Lee la contraseña del admin desde la caja fuerte
+        admin_pass = os.environ.get('ADMIN_PASSWORD', 'worldmoon2025')
+        if request.form.get('usuario') == 'admin' and request.form.get('password') == admin_pass:
             session['admin'] = True
             return redirect('/admin')
         return render_template('admin_login.html', error=True)

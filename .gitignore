@@ -1,6 +1,14 @@
-worldmoon.db
-__pycache__
-.venv
-.idea
-.idea/
+# Base de datos (Protege la información de tus clientes)
+*.db
+
+# Entorno virtual
+.venv/
+venv/
+env/
+
+# Archivos de contraseñas y secretos
+.env
+
+# Cache de Python
+__pycache__/
 *.pyc
