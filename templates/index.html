@@ -9,8 +9,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700&family=Orbitron:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <!-- 📱 LIBRERÍA QR CODE -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <meta name="theme-color" content="#9d4edd">
 
@@ -375,9 +373,8 @@
                     <div class="pago-dato"><span>Banco:</span><span>Bancamiga</span></div>
                     <div class="pago-dato"><span>Cédula/RIF:</span><span>V-23714719</span></div>
                     <div class="pago-dato"><span>Teléfono:</span><span>0412-6023833</span></div>
-                    <div class="pago-monto" id="pago-monto-qr"><small>Monto a pagar</small>$0.00</div>
-                    <div id="qrcode-container"></div>
-                    <p style="text-align:center; font-size:0.75rem; color:#8888aa; margin-top:10px;">Escanea este código o copia los datos</p>
+                    <div class="pago-monto" id="pago-monto"><small>Monto a pagar</small>$0.00</div>
+                    <button type="button" onclick="copiarDatosPago()" style="width:100%; padding:14px; border-radius:10px; border:2px solid #00e5ff; background:transparent; color:#00e5ff; cursor:pointer; font-weight:bold; margin-top:20px; font-size:1rem; text-transform:uppercase; letter-spacing:1px; transition: all 0.3s;">📋 Copiar Datos para el Pago Móvil</button>
                     <div style="margin-top: 15px; border-top: 1px solid rgba(0,229,255,0.2); padding-top: 15px;">
                         <p style="font-size:0.85rem; color:var(--azul-galactico-brillante); margin-bottom:10px; text-align:center;">Una vez realizado el pago, ingresa los datos aquí:</p>
                         <input type="text" id="checkout-comprobante" placeholder="📄 Número de Comprobante" style="width:100%; padding:10px; border-radius:8px; border:1px solid rgba(0,229,255,0.3); background:var(--negro-profundo); color:var(--blanco-estelar); margin-bottom:8px; font-size:0.9rem;">
@@ -622,10 +619,6 @@
             document.getElementById('zelle-info').style.display = 'none';
             if(pago === 'Pago Movil') {
                 document.getElementById('pago-movil-info').style.display = 'block';
-                var qrContainer = document.getElementById('qrcode-container');
-                qrContainer.innerHTML = '';
-                var textoQR = "Pago Movil World Moon | Banco: bancamiga | CI: V-23714719 | Tlf: 04126023833 | Monto: " + totalFinal.toFixed(2) + "$";
-                new QRCode(qrContainer, { text: textoQR, width: 120, height: 120, colorDark : "#0b0f2e", colorLight : "#ffffff" });
             } else if(pago === 'Efectivo') { document.getElementById('efectivo-info').style.display = 'block'; }
             else if(pago === 'Punto de Venta') { document.getElementById('pos-info').style.display = 'block'; }
             else if(pago === 'Zelle') { document.getElementById('zelle-info').style.display = 'block'; }
@@ -712,6 +705,17 @@
         window.addEventListener('scroll',function(){nav.style.backgroundColor=window.scrollY>50?'rgba(3,0,20,0.95)':'rgba(11,15,46,0.9)';nav.style.boxShadow=window.scrollY>50?'0 2px 15px rgba(0,229,255,0.2)':'0 0 15px rgba(0,229,255,0.1)';});
 
         renderizarCarrito();
+
+        function copiarDatosPago() {
+            var monto = document.getElementById('pago-monto-qr').textContent.replace('Monto a pagar', '').trim();
+            var texto = "Banco: Bancamiga\nCédula/RIF: V-23714719\nTeléfono: 04126023833\nMonto: " + monto;
+
+            navigator.clipboard.writeText(texto).then(function() {
+                mostrarToast('📋 ¡Datos copiados! Ahora pégalos en tu app del banco');
+            }).catch(function() {
+                mostrarToast('⚠️ No se pudo copiar, hazlo manualmente');
+            });
+        }
     </script>
 
 </body>
