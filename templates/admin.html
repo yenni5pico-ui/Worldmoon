@@ -140,6 +140,27 @@
             {% else %} <div style="text-align:center; padding:20px; color:#666;">No hay pedidos aún.</div> {% endif %}
         </div>
 
+        <!-- NUEVA SECCIÓN: CLIENTES REGISTRADOS -->
+        <div class="seccion">
+            <h2>👥 Clientes Registrados</h2>
+            {% if clientes|length > 0 %}
+            <div class="tabla-container"><table>
+                <thead><tr><th>ID</th><th>Nombre</th><th>Email</th><th>Teléfono</th><th>Dirección</th></tr></thead>
+                <tbody>
+                    {% for cliente in clientes %}
+                    <tr>
+                        <td>{{ cliente.id }}</td>
+                        <td><strong>{{ cliente.nombre }}</strong></td>
+                        <td>{{ cliente.email }}</td>
+                        <td>{{ cliente.telefono }}</td>
+                        <td>{{ cliente.direccion }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table></div>
+            {% else %} <div style="text-align:center; padding:20px; color:#666;">No hay clientes registrados aún.</div> {% endif %}
+        </div>
+
         <div class="seccion">
             <h2>📦 Inventario de Productos</h2>
             <form id="form-agregar" onsubmit="agregarProducto(event)">
@@ -197,7 +218,7 @@
         </div>
     </div>
 
-    <!-- MODAL EDITAR PRODUCTO (NUEVO) -->
+    <!-- MODAL EDITAR PRODUCTO -->
     <div class="modal-overlay" id="modal-editar">
         <div class="modal-box">
             <h3>✏️ Editar Producto</h3>
@@ -244,7 +265,7 @@
             .then(r=>r.json()).then(d=>{ if(d.success) location.reload(); });
         }
 
-        // NUEVAS FUNCIONES PARA EDITAR
+        // FUNCIONES PARA EDITAR
         function abrirEditar(id, nombre, genero, precio, stock, tallas, imagen) {
             document.getElementById('edit-id').value = id;
             document.getElementById('edit-nombre').value = nombre;

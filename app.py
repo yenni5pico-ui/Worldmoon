@@ -196,7 +196,7 @@ def checkout():
         comp_text = f"\n📄 *Comprobante:* {data.get('comprobante')}\n📱 *Tlf Origen:* {data.get('tlf_pago')}" if data.get(
             'metodo_pago') == 'Pago Movil' else ""
         mensaje_wa = f"Hola World Moon! 🌙 Pedido #{pedido_id}:\n👤 *Nombre:* {data.get('nombre')}\n📦 *Productos:* {data.get('productos')}\n💰 *Total:* ${data.get('total')}{comp_text}"
-        numero_wa = '584126653899'
+        numero_wa = '5841260238339'
         whatsapp_url = f'https://wa.me/{numero_wa}?text={mensaje_wa}'
 
         return jsonify({'success': True, 'whatsapp_url': whatsapp_url})
@@ -232,6 +232,9 @@ def admin():
     pedidos = conn.execute('SELECT * FROM pedidos ORDER BY fecha DESC').fetchall()
     productos = conn.execute('SELECT * FROM productos ORDER BY vendidos DESC').fetchall()
 
+    # NUEVA LÍNEA: Consultar clientes
+    clientes = conn.execute('SELECT * FROM usuarios ORDER BY id DESC').fetchall()
+
     total_pedidos = conn.execute('SELECT COUNT(*) as c FROM pedidos').fetchone()['c']
     total_ventas = conn.execute('SELECT COALESCE(SUM(total), 0) as s FROM pedidos').fetchone()['s']
     pendientes = conn.execute("SELECT COUNT(*) as c FROM pedidos WHERE estado='Pendiente'").fetchone()['c']
@@ -243,7 +246,9 @@ def admin():
         'SELECT nombre, email, COUNT(id) as compras, SUM(total) as total_gastado FROM pedidos GROUP BY email ORDER BY compras DESC LIMIT 3').fetchall()
 
     conn.close()
-    return render_template('admin.html', pedidos=pedidos, productos=productos,
+
+    # AQUÍ AGREGAMOS "clientes=clientes"
+    return render_template('admin.html', pedidos=pedidos, productos=productos, clientes=clientes,
                            total_pedidos=total_pedidos, total_ventas=total_ventas,
                            pendientes=pendientes, completados=completados,
                            top_productos=top_productos, clientes_frecuentes=clientes_frecuentes)
