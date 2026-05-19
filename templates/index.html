@@ -164,7 +164,6 @@
         .pago-dato span:last-child { color: var(--blanco-estelar); font-weight: bold; }
         .pago-monto { text-align: center; font-size: 1.8rem; font-weight: bold; color: var(--purpura-nebulosa); margin: 15px 0; text-shadow: 0 0 10px var(--purpura-nebulosa-oscuro); font-family: 'Orbitron', sans-serif; }
         .pago-monto small { font-size: 0.8rem; color: var(--azul-galactico-brillante); display: block; font-family: 'Exo 2', sans-serif; text-shadow: none; }
-        #qrcode-container { display: flex; justify-content: center; margin-top: 15px; padding: 15px; background: white; border-radius: 8px; width: 150px; height: 150px; margin-left: auto; margin-right: auto; }
         .efectivo-opciones, .zelle-opciones, .pos-opciones { margin-top: 10px; }
         .efectivo-opciones p, .zelle-opciones p, .pos-opciones p { font-size: 0.85rem; color: #8888aa; margin-bottom: 5px; text-align: left; }
         .efectivo-opciones strong, .zelle-opciones strong, .pos-opciones strong { color: var(--azul-galactico-brillante); }
@@ -372,8 +371,8 @@
                 <div id="pago-movil-info" style="display:none;">
                     <div class="pago-dato"><span>Banco:</span><span>Bancamiga</span></div>
                     <div class="pago-dato"><span>Cédula/RIF:</span><span>V-23714719</span></div>
-                    <div class="pago-dato"><span>Teléfono:</span><span>0412-6023833</span></div>
-                    <div class="pago-monto" id="pago-monto"><small>Monto a pagar</small>$0.00</div>
+                    <div class="pago-dato"><span>Teléfono:</span><span>04126023833</span></div>
+                    <div class="pago-monto" id="pago-monto-qr"><small>Monto a pagar</small>0.00$</div>
                     <button type="button" onclick="copiarDatosPago()" style="width:100%; padding:14px; border-radius:10px; border:2px solid #00e5ff; background:transparent; color:#00e5ff; cursor:pointer; font-weight:bold; margin-top:20px; font-size:1rem; text-transform:uppercase; letter-spacing:1px; transition: all 0.3s;">📋 Copiar Datos para el Pago Móvil</button>
                     <div style="margin-top: 15px; border-top: 1px solid rgba(0,229,255,0.2); padding-top: 15px;">
                         <p style="font-size:0.85rem; color:var(--azul-galactico-brillante); margin-bottom:10px; text-align:center;">Una vez realizado el pago, ingresa los datos aquí:</p>
@@ -396,7 +395,7 @@
                     <h3 style="color:var(--purpura-nebulosa); font-size:1rem; margin-bottom:10px;">💳 Pago con Punto de Venta</h3>
                     <div class="pos-opciones">
                         <p>Si seleccionas este método, el cobro se realizará de forma presencial:</p>
-                        <div class="pago-monto" id="pago-monto-pos"><small>Total a pagar (USD)</small>$0.00</div>
+                        <div class="pago-monto" id="pago-monto-pos"><small>Total a pagar (USD)</small>0.00$</div>
                         <p><strong>📦 Si eliges Delivery:</strong> Nuestro repartidor llevará el punto de venta. Ten tu tarjeta de débito o crédito lista al momento de recibir tu pedido.</p>
                         <p><strong>🏪 Si recoges en tienda:</strong> Puedes pasar tu tarjeta directamente en nuestro local al momento de retirar tu compra.</p>
                         <p style="margin-top:15px; text-align:center; font-size:0.8rem; color:var(--azul-galactico-brillante);">No necesitas realizar ninguna acción de pago ahora. ¡Solo confirma tu pedido!</p>
@@ -408,7 +407,7 @@
                         <p>Envía el monto exacto en dólares (USD) a la siguiente cuenta Zelle:</p>
                         <div class="pago-dato"><span>Titular:</span><span>World Moon C.A</span></div>
                         <div class="pago-dato"><span>Email Zelle:</span><span>worldmoon16@gmail.com</span></div>
-                        <div class="pago-monto" id="pago-monto-zelle"><small>Monto a pagar (USD)</small>$0.00</div>
+                        <div class="pago-monto" id="pago-monto-zelle"><small>Monto a pagar (USD)</small>0.00$</div>
                         <p style="text-align:center; font-size:0.8rem; color:var(--azul-galactico-brillante);">Luego de enviar, compártenos el capture por WhatsApp.</p>
                     </div>
                 </div>
@@ -422,8 +421,9 @@
                     <select id="checkout-pago" required onchange="calcularTotalYMostrarPago()">
                         <option value="">💳 Método de pago</option>
                         <option value="Efectivo">💵 Efectivo (Presencial / Depósito)</option>
-                        <option value="Pago Movil">📱 Pago Móvil (QR)</option>
+                        <option value="Pago Movil">📱 Pago Móvil (Copiar Datos)</option>
                         <option value="Punto de Venta">💳 Punto de Venta (Delivery)</option>
+                        <option value="Zelle">🇺🇸 Zelle (Internacional)</option>
                     </select>
                     <select id="checkout-delivery" required onchange="calcularTotalYMostrarPago()">
                         <option value="">🚚 Método de entrega</option>
@@ -454,7 +454,7 @@
         </div>
     </div>
 
-    <a href="https://wa.me/584126653899?text=Hola%20World%20Moon!%20Quiero%20info%20sobre%20las%20sudaderas" target="_blank" class="whatsapp-btn">💬</a>
+    <a href="https://wa.me/584126023833?text=Hola%20World%20Moon!%20Quiero%20info%20sobre%20las%20sudaderas" target="_blank" class="whatsapp-btn">💬</a>
     <div class="toast" id="toast"></div>
 
     <script>
@@ -462,6 +462,7 @@
         var catalogoVisible = false;
         var productosDB = [];
         var usuarioLogueado = null;
+        var totalFinalGlobal = 0; // Variable global para el botón copiar
 
         window.onload = function() { verificarSesion(); };
 
@@ -609,19 +610,40 @@
             var subtotal = carrito.reduce(function(s,i){return s+(i.precio*i.cantidad)},0);
             var costoDelivery = delivery==='Delivery local'?2.00:delivery==='Delivery foráneo'?5.00:0;
             var totalFinal = subtotal + costoDelivery;
+
+            totalFinalGlobal = totalFinal; // Guardamos el total para la función copiar
+
             document.getElementById('pago-monto-qr').innerHTML = '<small>Monto a pagar</small>'+totalFinal.toFixed(2)+'$';
             document.getElementById('pago-monto-zelle').innerHTML = '<small>Monto a pagar (USD)</small>'+totalFinal.toFixed(2)+'$';
             document.getElementById('pago-monto-pos').innerHTML = '<small>Total a pagar (USD)</small>'+totalFinal.toFixed(2)+'$';
+
             cajaInstrucciones.classList.add('visible');
+
             document.getElementById('pago-movil-info').style.display = 'none';
             document.getElementById('efectivo-info').style.display = 'none';
             document.getElementById('pos-info').style.display = 'none';
             document.getElementById('zelle-info').style.display = 'none';
+
             if(pago === 'Pago Movil') {
                 document.getElementById('pago-movil-info').style.display = 'block';
-            } else if(pago === 'Efectivo') { document.getElementById('efectivo-info').style.display = 'block'; }
-            else if(pago === 'Punto de Venta') { document.getElementById('pos-info').style.display = 'block'; }
-            else if(pago === 'Zelle') { document.getElementById('zelle-info').style.display = 'block'; }
+            } else if(pago === 'Efectivo') {
+                document.getElementById('efectivo-info').style.display = 'block';
+            } else if(pago === 'Punto de Venta') {
+                document.getElementById('pos-info').style.display = 'block';
+            } else if(pago === 'Zelle') {
+                document.getElementById('zelle-info').style.display = 'block';
+            }
+        }
+
+        function copiarDatosPago() {
+            var monto = totalFinalGlobal.toFixed(2) + '$';
+            var texto = "Banco: Bancamiga\nCédula/RIF: V-23714719\nTeléfono: 04126023833\nMonto: " + monto;
+
+            navigator.clipboard.writeText(texto).then(function() {
+                mostrarToast('📋 ¡Datos copiados! Ahora pégalos en tu app del banco');
+            }).catch(function() {
+                mostrarToast('⚠️ No se pudo copiar, hazlo manualmente');
+            });
         }
 
         function confirmarCompra(e){
@@ -705,18 +727,7 @@
         window.addEventListener('scroll',function(){nav.style.backgroundColor=window.scrollY>50?'rgba(3,0,20,0.95)':'rgba(11,15,46,0.9)';nav.style.boxShadow=window.scrollY>50?'0 2px 15px rgba(0,229,255,0.2)':'0 0 15px rgba(0,229,255,0.1)';});
 
         renderizarCarrito();
-
-        function copiarDatosPago() {
-            var monto = document.getElementById('pago-monto-qr').textContent.replace('Monto a pagar', '').trim();
-            var texto = "Banco: Bancamiga\nCédula/RIF: V-23714719\nTeléfono: 04126023833\nMonto: " + monto;
-
-            navigator.clipboard.writeText(texto).then(function() {
-                mostrarToast('📋 ¡Datos copiados! Ahora pégalos en tu app del banco');
-            }).catch(function() {
-                mostrarToast('⚠️ No se pudo copiar, hazlo manualmente');
-            });
-        }
     </script>
 
 </body>
-</htm
+</html>
