@@ -278,7 +278,7 @@
                     <h3>📍 Contacto</h3>
                     <p>📍 Avenida Principal de El Cementerio, Parroquia Santa Rosalía, Caracas, Venezuela</p>
                     <p>📞 04126023833</p>
-                    <p>✉️worldmoonsudaderas16@gmail.com</p>
+                    <p>✉️ worldmoonsudaderas16@gmail.com</p>
                     <p>🕐 Lunes a Sábado: 9am - 8pm</p>
                 </div>
             </div>
@@ -310,7 +310,7 @@
         <div class="copyright">&copy; 2025 World Moon. Todos los derechos reservados.</div>
     </footer>
 
-    <!-- MODAL DE AUTENTICACIÓN (LOGIN / REGISTRO) -->
+    <!-- MODAL DE AUTENTICACIÓN -->
     <div class="modal-overlay" id="modal-auth">
         <div class="modal-contenido" style="max-width: 450px;">
             <button class="btn-cerrar-modal" onclick="cerrarModalAuth()">&times;</button>
@@ -370,27 +370,20 @@
             <h2>Finalizar Compra</h2>
             <div id="checkout-resumen" class="checkout-resumen"></div>
 
-            <!-- CAJA DE INSTRUCCIONES DE PAGO -->
             <div class="pago-instrucciones-box" id="pago-instrucciones">
-
-                <!-- PAGO MÓVIL -->
                 <div id="pago-movil-info" style="display:none;">
-                    <div class="pago-dato"><span>Banco:</span><span>Banca amiga</span></div>
-                    <div class="pago-dato"><span>Cédula/RIF:</span><span>V-23714719</span></div>
-                    <div class="pago-dato"><span>Teléfono:</span><span>0412-6023833</span></div>
+                    <div class="pago-dato"><span>Banco:</span><span>Banco de Venezuela</span></div>
+                    <div class="pago-dato"><span>Cédula/RIF:</span><span>V-12345678</span></div>
+                    <div class="pago-dato"><span>Teléfono:</span><span>0412-6653899</span></div>
                     <div class="pago-monto" id="pago-monto-qr"><small>Monto a pagar</small>$0.00</div>
                     <div id="qrcode-container"></div>
                     <p style="text-align:center; font-size:0.75rem; color:#8888aa; margin-top:10px;">Escanea este código o copia los datos</p>
-
-                    <!-- CAMPOS DE COMPROBANTE -->
                     <div style="margin-top: 15px; border-top: 1px solid rgba(0,229,255,0.2); padding-top: 15px;">
                         <p style="font-size:0.85rem; color:var(--azul-galactico-brillante); margin-bottom:10px; text-align:center;">Una vez realizado el pago, ingresa los datos aquí:</p>
                         <input type="text" id="checkout-comprobante" placeholder="📄 Número de Comprobante" style="width:100%; padding:10px; border-radius:8px; border:1px solid rgba(0,229,255,0.3); background:var(--negro-profundo); color:var(--blanco-estelar); margin-bottom:8px; font-size:0.9rem;">
                         <input type="tel" id="checkout-tlf-pago" placeholder="📱 Teléfono desde el que pagó" style="width:100%; padding:10px; border-radius:8px; border:1px solid rgba(0,229,255,0.3); background:var(--negro-profundo); color:var(--blanco-estelar); font-size:0.9rem;">
                     </div>
                 </div>
-
-                <!-- EFECTIVO -->
                 <div id="efectivo-info" style="display:none;">
                     <h3 style="color:var(--rojo); font-size:1.1rem; margin-bottom:15px; text-align:center; text-transform:uppercase;">⚠️ Aviso Importante de Pago en Efectivo</h3>
                     <p style="font-size:0.9rem; color:var(--blanco-estelar); margin-bottom:15px; text-align:center; font-weight:bold;">Si seleccionas este método, debes elegir una de las siguientes opciones:</p>
@@ -402,38 +395,45 @@
                         <p style="margin-top:10px; color:var(--azul-galactico-brillante); font-weight:bold;">Luego de pagar, envíanos la foto del comprobante por WhatsApp.</p>
                     </div>
                 </div>
-
-                <!-- PUNTO DE VENTA -->
                 <div id="pos-info" style="display:none;">
                     <h3 style="color:var(--purpura-nebulosa); font-size:1rem; margin-bottom:10px;">💳 Pago con Punto de Venta</h3>
                     <div class="pos-opciones">
                         <p>Si seleccionas este método, el cobro se realizará de forma presencial:</p>
-                        <div class="pago-monto" id="pago-monto-pos"><small>Total a pagar (USD)</small>0.00$</div>
+                        <div class="pago-monto" id="pago-monto-pos"><small>Total a pagar (USD)</small>$0.00</div>
                         <p><strong>📦 Si eliges Delivery:</strong> Nuestro repartidor llevará el punto de venta. Ten tu tarjeta de débito o crédito lista al momento de recibir tu pedido.</p>
                         <p><strong>🏪 Si recoges en tienda:</strong> Puedes pasar tu tarjeta directamente en nuestro local al momento de retirar tu compra.</p>
                         <p style="margin-top:15px; text-align:center; font-size:0.8rem; color:var(--azul-galactico-brillante);">No necesitas realizar ninguna acción de pago ahora. ¡Solo confirma tu pedido!</p>
                     </div>
                 </div>
-
+                <div id="zelle-info" style="display:none;">
+                    <h3 style="color:var(--purpura-nebulosa); font-size:1rem; margin-bottom:10px;">🇺🇸 Pago por Zelle</h3>
+                    <div class="zelle-opciones">
+                        <p>Envía el monto exacto en dólares (USD) a la siguiente cuenta Zelle:</p>
+                        <div class="pago-dato"><span>Titular:</span><span>World Moon C.A</span></div>
+                        <div class="pago-dato"><span>Email Zelle:</span><span>worldmoon16@gmail.com</span></div>
+                        <div class="pago-monto" id="pago-monto-zelle"><small>Monto a pagar (USD)</small>$0.00</div>
+                        <p style="text-align:center; font-size:0.8rem; color:var(--azul-galactico-brillante);">Luego de enviar, compártenos el capture por WhatsApp.</p>
+                    </div>
+                </div>
+            </div>
 
             <form id="form-checkout" onsubmit="confirmarCompra(event)">
                 <div class="checkout-campos">
                     <input type="text" id="checkout-nombre" placeholder="👤 Nombre completo" required>
                     <input type="email" id="checkout-email" placeholder="📧 Correo electrónico" required>
                     <input type="tel" id="checkout-telefono" placeholder="📱 Teléfono" required>
-
                     <select id="checkout-pago" required onchange="calcularTotalYMostrarPago()">
                         <option value="">💳 Método de pago</option>
                         <option value="Efectivo">💵 Efectivo (Presencial / Depósito)</option>
                         <option value="Pago Movil">📱 Pago Móvil (QR)</option>
                         <option value="Punto de Venta">💳 Punto de Venta (Delivery)</option>
+                        <option value="Zelle">🇺🇸 Zelle (Internacional)</option>
                     </select>
-
                     <select id="checkout-delivery" required onchange="calcularTotalYMostrarPago()">
                         <option value="">🚚 Método de entrega</option>
                         <option value="Recoger en tienda">🏪 Recoger en tienda</option>
-                        <option value="Delivery local">🚗 Delivery local (+2.00$)</option>
-                        <option value="Delivery foráneo">🚚 Delivery foráneo (+5.00$)</option>
+                        <option value="Delivery local">🚗 Delivery local (+$2.00)</option>
+                        <option value="Delivery foráneo">🚚 Delivery foráneo (+$5.00)</option>
                     </select>
                     <input type="text" id="checkout-direccion" placeholder="🏠 Dirección (si es delivery)">
                 </div>
@@ -442,52 +442,23 @@
         </div>
     </div>
 
-    <div class="modal-overlay" id="modal-privacidad">
-        <div class="modal-contenido">
-            <button class="btn-cerrar-modal" onclick="cerrarModal('modal-privacidad')">&times;</button>
-            <h2>Aviso de Privacidad</h2>
-            <p>En <strong>World Moon</strong>, nos comprometemos a proteger tus datos personales conforme a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP).</p>
-            <h3>Datos que recopilamos</h3><p>Nombre, correo electrónico, teléfono y dirección de envío, únicamente necesarios para procesar tus pedidos.</p>
-            <h3>Uso de datos</h3><p>Tus datos se utilizan exclusivamente para: procesar pedidos, enviar actualizaciones de compra y ofrecer promociones (solo si lo autorizas).</p>
-            <h3>Tus derechos</h3><p>Puedes solicitar en cualquier momento el acceso, rectificación, cancelación u oposición de tus datos personales escribiendo a hola@worldmoon.com.</p>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="modal-terminos">
-        <div class="modal-contenido">
-            <button class="btn-cerrar-modal" onclick="cerrarModal('modal-terminos')">&times;</button>
-            <h2>Términos y Condiciones</h2>
-            <p>Al realizar una compra en <strong>World Moon</strong>, aceptas los siguientes términos:</p>
-            <h3>Precios y pagos</h3><p>Los precios están en dólares e incluyen IVA. Los pagos se realizan al momento de la entrega o por transferencia bancaria.</p>
-            <h3>Cambios y devoluciones</h3><p>Tienes 30 días naturales para solicitar un cambio. El producto debe estar sin uso, con etiquetas originales.</p>
-            <h3>Disponibilidad</h3><p>Nos reservamos el derecho de limitar cantidades. Si un producto no está disponible, te ofreceremos una alternativa o reembolso.</p>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="modal-envios">
-        <div class="modal-contenido">
-            <button class="btn-cerrar-modal" onclick="cerrarModal('modal-envios')">&times;</button>
-            <h2>Política de Envíos</h2>
-            <h3>Tiempos de entrega</h3><p>Caracas: 1 día hábil. Resto del país: 3-5 días hábiles.</p>
-            <h3>Costos de envío</h3><p>Recoger en tienda. Delivery local: 2.00$. Delivery foráneo: 5.00$.</p>
-            <h3>Seguimiento</h3><p>Al confirmar tu pedido recibirás un número de guía por WhatsApp o correo electrónico para rastrear tu envío.</p>
-        </div>
-    </div>
+    <div class="modal-overlay" id="modal-privacidad"><div class="modal-contenido"><button class="btn-cerrar-modal" onclick="cerrarModal('modal-privacidad')">&times;</button><h2>Aviso de Privacidad</h2><p>En <strong>World Moon</strong>, nos comprometemos a proteger tus datos personales conforme a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP).</p><h3>Datos que recopilamos</h3><p>Nombre, correo electrónico, teléfono y dirección de envío, únicamente necesarios para procesar tus pedidos.</p><h3>Uso de datos</h3><p>Tus datos se utilizan exclusivamente para: procesar pedidos, enviar actualizaciones de compra y ofrecer promociones (solo si lo autorizas).</p><h3>Tus derechos</h3><p>Puedes solicitar en cualquier momento el acceso, rectificación, cancelación u oposición de tus datos personales escribiendo a hola@worldmoon.com.</p></div></div>
+    <div class="modal-overlay" id="modal-terminos"><div class="modal-contenido"><button class="btn-cerrar-modal" onclick="cerrarModal('modal-terminos')">&times;</button><h2>Términos y Condiciones</h2><p>Al realizar una compra en <strong>World Moon</strong>, aceptas los siguientes términos:</p><h3>Precios y pagos</h3><p>Los precios están en dólares e incluyen IVA. Los pagos se realizan al momento de la entrega o por transferencia bancaria.</p><h3>Cambios y devoluciones</h3><p>Tienes 30 días naturales para solicitar un cambio. El producto debe estar sin uso, con etiquetas originales.</p><h3>Disponibilidad</h3><p>Nos reservamos el derecho de limitar cantidades. Si un producto no está disponible, te ofreceremos una alternativa o reembolso.</p></div></div>
+    <div class="modal-overlay" id="modal-envios"><div class="modal-contenido"><button class="btn-cerrar-modal" onclick="cerrarModal('modal-envios')">&times;</button><h2>Política de Envíos</h2><h3>Tiempos de entrega</h3><p>Caracas: 1 día hábil. Resto del país: 3-5 días hábiles.</p><h3>Costos de envío</h3><p>Recoger en tienda. Delivery local: $2.00. Delivery foráneo: $5.00.</p><h3>Seguimiento</h3><p>Al confirmar tu pedido recibirás un número de guía por WhatsApp o correo electrónico para rastrear tu envío.</p></div></div>
 
     <div class="carrito-overlay" id="carrito-overlay"></div>
     <div class="carrito-panel" id="carrito-panel">
         <div class="carrito-header"><h2>🛒 Mi Carrito</h2><button class="btn-cerrar-carrito" id="btn-cerrar-carrito">✕</button></div>
         <div class="carrito-items" id="carrito-items"></div>
         <div class="carrito-footer" id="carrito-footer">
-            <div class="carrito-subtotal"><span>Subtotal:</span><span id="carrito-subtotal">$0.00</span></div>
-            <div class="carrito-total"><span>Total:</span><span id="carrito-total">$0.00</span></div>
+            <div class="carrito-subtotal"><span>Subtotal:</span><span id="carrito-subtotal">0.00$</span></div>
+            <div class="carrito-total"><span>Total:</span><span id="carrito-total">0.00$</span></div>
             <button class="btn-comprar" id="btn-comprar">Finalizar Compra</button>
             <button class="btn-vaciar" id="btn-vaciar">Vaciar Carrito</button>
         </div>
     </div>
 
-    <a href="https://wa.me/584126023833?text=Hola%20World%20Moon!%20Quiero%20info%20sobre%20las%20sudaderas" target="_blank" class="whatsapp-btn">💬</a>
-
+    <a href="https://wa.me/584126653899?text=Hola%20World%20Moon!%20Quiero%20info%20sobre%20las%20sudaderas" target="_blank" class="whatsapp-btn">💬</a>
     <div class="toast" id="toast"></div>
 
     <script>
@@ -496,19 +467,12 @@
         var productosDB = [];
         var usuarioLogueado = null;
 
-        window.onload = function() {
-            verificarSesion();
-        };
+        window.onload = function() { verificarSesion(); };
 
         function verificarSesion() {
             fetch('/api/check_session').then(r => r.json()).then(data => {
-                if(data.logged_in) {
-                    usuarioLogueado = data.nombre;
-                    actualizarUIAuth(true, data.nombre);
-                } else {
-                    usuarioLogueado = null;
-                    actualizarUIAuth(false);
-                }
+                if(data.logged_in) { usuarioLogueado = data.nombre; actualizarUIAuth(true, data.nombre); }
+                else { usuarioLogueado = null; actualizarUIAuth(false); }
             });
         }
 
@@ -516,21 +480,8 @@
             var btnAuth = document.getElementById('btn-nav-auth');
             var welcomeMsj = document.getElementById('user-welcome');
             var btnMovilAuth = document.getElementById('btn-movil-auth');
-
-            if(logueado) {
-                btnAuth.textContent = 'Cerrar Sesión';
-                btnAuth.classList.add('logout');
-                btnAuth.onclick = cerrarSesion;
-                welcomeMsj.textContent = '👋 ' + nombre;
-                welcomeMsj.style.display = 'inline-block';
-                if(btnMovilAuth) btnMovilAuth.textContent = 'Cerrar Sesión';
-            } else {
-                btnAuth.textContent = 'Ingresar';
-                btnAuth.classList.remove('logout');
-                btnAuth.onclick = abrirModalAuth;
-                welcomeMsj.style.display = 'none';
-                if(btnMovilAuth) btnMovilAuth.textContent = 'Ingresar';
-            }
+            if(logueado) { btnAuth.textContent = 'Cerrar Sesión'; btnAuth.classList.add('logout'); btnAuth.onclick = cerrarSesion; welcomeMsj.textContent = '👋 ' + nombre; welcomeMsj.style.display = 'inline-block'; if(btnMovilAuth) btnMovilAuth.textContent = 'Cerrar Sesión'; }
+            else { btnAuth.textContent = 'Ingresar'; btnAuth.classList.remove('logout'); btnAuth.onclick = abrirModalAuth; welcomeMsj.style.display = 'none'; if(btnMovilAuth) btnMovilAuth.textContent = 'Ingresar'; }
         }
 
         function abrirModalAuth() { abrirModal('modal-auth'); }
@@ -539,25 +490,23 @@
         function cambiarTabAuth(tab) {
             document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('activo'));
             document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('activo'));
-
-            if(tab === 'login') {
-                document.querySelectorAll('.auth-tab')[0].classList.add('activo');
-                document.getElementById('form-login').classList.add('activo');
-            } else {
-                document.querySelectorAll('.auth-tab')[1].classList.add('activo');
-                document.getElementById('form-registro').classList.add('activo');
-            }
+            if(tab === 'login') { document.querySelectorAll('.auth-tab')[0].classList.add('activo'); document.getElementById('form-login').classList.add('activo'); }
+            else { document.querySelectorAll('.auth-tab')[1].classList.add('activo'); document.getElementById('form-registro').classList.add('activo'); }
         }
 
-                function registrarUsuario(e) {
+        function iniciarSesion(e) {
             e.preventDefault();
-            var data = {
-                nombre: document.getElementById('reg-nombre').value,
-                email: document.getElementById('reg-email').value,
-                telefono: document.getElementById('reg-telefono').value,
-                direccion: document.getElementById('reg-direccion').value,
-                password: document.getElementById('reg-password').value
-            };
+            var data = { email: document.getElementById('login-email').value, password: document.getElementById('login-password').value };
+            fetch('/api/login', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) })
+            .then(r => r.json()).then(d => {
+                if(d.success) { usuarioLogueado = d.nombre; actualizarUIAuth(true, d.nombre); cerrarModalAuth(); mostrarToast('¡Bienvenido, ' + d.nombre + '! 🚀'); document.getElementById('form-login').reset(); }
+                else { mostrarToast('⚠️ ' + d.error); }
+            });
+        }
+
+        function registrarUsuario(e) {
+            e.preventDefault();
+            var data = { nombre: document.getElementById('reg-nombre').value, email: document.getElementById('reg-email').value, telefono: document.getElementById('reg-telefono').value, direccion: document.getElementById('reg-direccion').value, password: document.getElementById('reg-password').value };
             fetch('/api/registro', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) })
             .then(r => r.json()).then(d => {
                 if(d.success) {
@@ -566,25 +515,13 @@
                     cerrarModalAuth();
                     mostrarToast('¡Cuenta creada con éxito! Revisa tu correo 🌌');
                     document.getElementById('form-registro').reset();
-
-                    // NUEVO: Abrir WhatsApp de bienvenida si viene en la respuesta
-                    if(d.whatsapp_url) {
-                        window.open(d.whatsapp_url, '_blank');
-                    }
-                } else {
-                    mostrarToast('⚠️ ' + d.error);
-                }
+                    if(d.whatsapp_url) { window.open(d.whatsapp_url, '_blank'); }
+                } else { mostrarToast('⚠️ ' + d.error); }
             });
         }
 
         function cerrarSesion() {
-            fetch('/api/logout').then(r => r.json()).then(d => {
-                if(d.success) {
-                    usuarioLogueado = null;
-                    actualizarUIAuth(false);
-                    mostrarToast('Sesión cerrada 👋');
-                }
-            });
+            fetch('/api/logout').then(r => r.json()).then(d => { if(d.success) { usuarioLogueado = null; actualizarUIAuth(false); mostrarToast('Sesión cerrada 👋'); } });
         }
 
         function cargarProductos() {
@@ -655,17 +592,15 @@
 
         function abrirCheckout(){
             cerrarCarrito();var r=document.getElementById('checkout-resumen');var h='';
-            carrito.forEach(function(i){h+='<div class="checkout-resumen-item"><span>'+i.cantidad+'x '+i.nombre+' ('+i.talla+')</span><span>$'+(i.precio*i.cantidad).toFixed(2)+'</span></div>';});
+            carrito.forEach(function(i){h+='<div class="checkout-resumen-item"><span>'+i.cantidad+'x '+i.nombre+' ('+i.talla+')</span><span>'+(i.precio*i.cantidad).toFixed(2)+'$</span></div>';});
             var t=carrito.reduce(function(s,i){return s+(i.precio*i.cantidad)},0);
-            h+='<div class="checkout-resumen-item" style="color:#8888aa"><span>Subtotal productos</span><span>$'+t.toFixed(2)+'</span></div>';
+            h+='<div class="checkout-resumen-item" style="color:#8888aa"><span>Subtotal productos</span><span>'+t.toFixed(2)+'$</span></div>';
             r.innerHTML=h;
-
             document.getElementById('pago-instrucciones').classList.remove('visible');
             document.getElementById('pago-movil-info').style.display = 'none';
             document.getElementById('efectivo-info').style.display = 'none';
             document.getElementById('pos-info').style.display = 'none';
             document.getElementById('zelle-info').style.display = 'none';
-
             setTimeout(function(){abrirModal('modal-checkout')},300);
         }
         function cerrarCheckout(){cerrarModal('modal-checkout');}
@@ -674,113 +609,61 @@
             var pago = document.getElementById('checkout-pago').value;
             var delivery = document.getElementById('checkout-delivery').value;
             var cajaInstrucciones = document.getElementById('pago-instrucciones');
-
-            if(!pago || !delivery) {
-                cajaInstrucciones.classList.remove('visible');
-                return;
-            }
-
+            if(!pago || !delivery) { cajaInstrucciones.classList.remove('visible'); return; }
             var subtotal = carrito.reduce(function(s,i){return s+(i.precio*i.cantidad)},0);
             var costoDelivery = delivery==='Delivery local'?2.00:delivery==='Delivery foráneo'?5.00:0;
             var totalFinal = subtotal + costoDelivery;
-
-            document.getElementById('pago-monto-qr').innerHTML = '<small>Monto a pagar</small>$' + totalFinal.toFixed(2);
-            document.getElementById('pago-monto-zelle').innerHTML = '<small>Monto a pagar (USD)</small>$' + totalFinal.toFixed(2);
-            document.getElementById('pago-monto-pos').innerHTML = '<small>Total a pagar (USD)</small>$' + totalFinal.toFixed(2);
-
+            document.getElementById('pago-monto-qr').innerHTML = '<small>Monto a pagar</small>'+totalFinal.toFixed(2)+'$';
+            document.getElementById('pago-monto-zelle').innerHTML = '<small>Monto a pagar (USD)</small>'+totalFinal.toFixed(2)+'$';
+            document.getElementById('pago-monto-pos').innerHTML = '<small>Total a pagar (USD)</small>'+totalFinal.toFixed(2)+'$';
             cajaInstrucciones.classList.add('visible');
-
             document.getElementById('pago-movil-info').style.display = 'none';
             document.getElementById('efectivo-info').style.display = 'none';
             document.getElementById('pos-info').style.display = 'none';
             document.getElementById('zelle-info').style.display = 'none';
-
             if(pago === 'Pago Movil') {
                 document.getElementById('pago-movil-info').style.display = 'block';
                 var qrContainer = document.getElementById('qrcode-container');
                 qrContainer.innerHTML = '';
-                var textoQR = "Pago Movil World Moon | Banco: Venezuela | CI: V-12345678 | Tlf: 04126653899 | Monto: $" + totalFinal.toFixed(2);
-                new QRCode(qrContainer, {
-                    text: textoQR,
-                    width: 120,
-                    height: 120,
-                    colorDark : "#0b0f2e",
-                    colorLight : "#ffffff",
-                });
-            } else if(pago === 'Efectivo') {
-                document.getElementById('efectivo-info').style.display = 'block';
-            } else if(pago === 'Punto de Venta') {
-                document.getElementById('pos-info').style.display = 'block';
-            }
+                var textoQR = "Pago Movil World Moon | Banco: Venezuela | CI: V-12345678 | Tlf: 04126653899 | Monto: " + totalFinal.toFixed(2) + "$";
+                new QRCode(qrContainer, { text: textoQR, width: 120, height: 120, colorDark : "#0b0f2e", colorLight : "#ffffff" });
+            } else if(pago === 'Efectivo') { document.getElementById('efectivo-info').style.display = 'block'; }
+            else if(pago === 'Punto de Venta') { document.getElementById('pos-info').style.display = 'block'; }
+            else if(pago === 'Zelle') { document.getElementById('zelle-info').style.display = 'block'; }
         }
 
         function confirmarCompra(e){
             e.preventDefault();
-
-            if(!usuarioLogueado) {
-                mostrarToast('⚠️ Debes iniciar sesión para comprar');
-                cerrarCheckout();
-                setTimeout(function(){ abrirModalAuth(); }, 500);
-                return;
-            }
-
+            if(!usuarioLogueado) { mostrarToast('⚠️ Debes iniciar sesión para comprar'); cerrarCheckout(); setTimeout(function(){ abrirModalAuth(); }, 500); return; }
             var n=document.getElementById('checkout-nombre').value;var em=document.getElementById('checkout-email').value;var tel=document.getElementById('checkout-telefono').value;
-            var pago=document.getElementById('checkout-pago').value;
-            var delivery=document.getElementById('checkout-delivery').value;
-            var dir=document.getElementById('checkout-direccion').value;
-            var comprobante = document.getElementById('checkout-comprobante').value;
-            var tlfPago = document.getElementById('checkout-tlf-pago').value;
-
+            var pago=document.getElementById('checkout-pago').value; var delivery=document.getElementById('checkout-delivery').value; var dir=document.getElementById('checkout-direccion').value;
+            var comprobante = document.getElementById('checkout-comprobante').value; var tlfPago = document.getElementById('checkout-tlf-pago').value;
             if(!pago){mostrarToast('⚠️ Selecciona método de pago');return;}
             if(!delivery){mostrarToast('⚠️ Selecciona método de entrega');return;}
             if(delivery!=='Recoger en tienda'&&!dir){mostrarToast('⚠️ Escribe tu dirección');document.getElementById('checkout-direccion').focus();return;}
-            if(pago === 'Pago Movil' && !comprobante) {
-                mostrarToast('⚠️ Ingresa el número de comprobante del Pago Móvil');
-                return;
-            }
-
+            if(pago === 'Pago Movil' && !comprobante) { mostrarToast('⚠️ Ingresa el número de comprobante del Pago Móvil'); return; }
             var prods=carrito.map(function(i){return i.cantidad+'x '+i.nombre+' ('+i.talla+')'}).join(', ');
             var itemsDetalle = carrito.map(function(i){ return { id: i.id, cantidad: i.cantidad }; });
             var subtotal=carrito.reduce(function(s,i){return s+(i.precio*i.cantidad)},0);
             var costoDelivery=delivery==='Delivery local'?2.00:delivery==='Delivery foráneo'?5.00:0;
             var totalFinal=subtotal+costoDelivery;
-
-            var btnComprar = document.querySelector('.btn-confirmar-compra');
-            btnComprar.textContent = 'Procesando...';
-            btnComprar.disabled = true;
-
+            var btnComprar = document.querySelector('.btn-confirmar-compra'); btnComprar.textContent = 'Procesando...'; btnComprar.disabled = true;
             fetch('/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre:n,email:em,telefono:tel,productos:prods,total:totalFinal,metodo_pago:pago,direccion:dir,delivery:delivery, items_detalle: itemsDetalle, comprobante: comprobante, tlf_pago: tlfPago})})
             .then(function(r){
-                if(r.status === 403) {
-                    mostrarToast('⚠️ Tu sesión ha expirado. Ingresa de nuevo.');
-                    cerrarCheckout();
-                    setTimeout(function(){ abrirModalAuth(); }, 500);
-                    return null;
-                }
+                if(r.status === 403) { mostrarToast('⚠️ Tu sesión ha expirado. Ingresa de nuevo.'); cerrarCheckout(); setTimeout(function(){ abrirModalAuth(); }, 500); return null; }
                 return r.json();
             })
             .then(function(d){
                 if(!d) return;
                 if(d.success){
                     cerrarCheckout();
-
-                    if(d.whatsapp_url) {
-                        window.open(d.whatsapp_url, '_blank');
-                        mostrarToast('¡Pedido y correo enviados! Confirma por WhatsApp 📱');
-                    } else {
-                        mostrarToast('¡Pedido registrado! Revisa tu correo 🎉');
-                    }
-
-                    carrito=[];renderizarCarrito();
-                    document.getElementById('form-checkout').reset();
+                    if(d.whatsapp_url) { window.open(d.whatsapp_url, '_blank'); mostrarToast('¡Pedido y correo enviados! Confirma por WhatsApp 📱'); }
+                    else { mostrarToast('¡Pedido registrado! Revisa tu correo 🎉'); }
+                    carrito=[];renderizarCarrito(); document.getElementById('form-checkout').reset();
                     document.getElementById('pago-instrucciones').classList.remove('visible');
-                    document.getElementById('checkout-comprobante').value = '';
-                    document.getElementById('checkout-tlf-pago').value = '';
-                }else{
-                    mostrarToast('Error: ' + d.error);
-                }
-                btnComprar.textContent = 'Confirmar Pedido';
-                btnComprar.disabled = false;
+                    document.getElementById('checkout-comprobante').value = ''; document.getElementById('checkout-tlf-pago').value = '';
+                }else{ mostrarToast('Error: ' + d.error); }
+                btnComprar.textContent = 'Confirmar Pedido'; btnComprar.disabled = false;
             })
             .catch(function(){mostrarToast('Error de conexión ❌'); btnComprar.textContent = 'Confirmar Pedido'; btnComprar.disabled = false;});
         }
@@ -796,8 +679,8 @@
             var ti=carrito.reduce(function(s,i){return s+i.cantidad},0);carritoBadge.textContent=ti;carritoBadge.classList.toggle('visible',ti>0);
             if(carrito.length===0){carritoItems.innerHTML='<div class="carrito-vacio"><div class="carrito-vacio-icono">🛒</div><p>Tu carrito está vacío</p><button class="btn-seguir" onclick="cerrarCarrito();toggleCatalogo();">Ver productos</button></div>';carritoFooter.style.display='none';return;}
             carritoFooter.style.display='block';var h='';
-            carrito.forEach(function(i){h+='<div class="carrito-item"><img src="'+i.img+'" alt="'+i.nombre+'" class="carrito-item-img"><div class="carrito-item-info"><h4>'+i.nombre+'</h4><span class="carrito-item-genero">'+i.genero+' · Talla '+i.talla+'</span><p class="carrito-item-precio">$'+(i.precio*i.cantidad).toFixed(2)+'</p></div><div class="carrito-item-controles"><div class="controles-cantidad"><button class="btn-cantidad" onclick="cambiarCantidad(\''+i.idConTalla+'\',-1)">−</button><span class="cantidad-numero">'+i.cantidad+'</span><button class="btn-cantidad" onclick="cambiarCantidad(\''+i.idConTalla+'\',1)">+</button></div><button class="btn-eliminar-item" onclick="eliminarItem(\''+i.idConTalla+'\')">Eliminar</button></div></div>';});
-            carritoItems.innerHTML=h;var st=carrito.reduce(function(s,i){return s+(i.precio*i.cantidad)},0);carritoSubtotal.textContent='$'+st.toFixed(2);carritoTotal.textContent='$'+st.toFixed(2);
+            carrito.forEach(function(i){h+='<div class="carrito-item"><img src="'+i.img+'" alt="'+i.nombre+'" class="carrito-item-img"><div class="carrito-item-info"><h4>'+i.nombre+'</h4><span class="carrito-item-genero">'+i.genero+' · Talla '+i.talla+'</span><p class="carrito-item-precio">'+(i.precio*i.cantidad).toFixed(2)+'$</p></div><div class="carrito-item-controles"><div class="controles-cantidad"><button class="btn-cantidad" onclick="cambiarCantidad(\''+i.idConTalla+'\',-1)">−</button><span class="cantidad-numero">'+i.cantidad+'</span><button class="btn-cantidad" onclick="cambiarCantidad(\''+i.idConTalla+'\',1)">+</button></div><button class="btn-eliminar-item" onclick="eliminarItem(\''+i.idConTalla+'\')">Eliminar</button></div></div>';});
+            carritoItems.innerHTML=h;var st=carrito.reduce(function(s,i){return s+(i.precio*i.cantidad)},0);carritoSubtotal.textContent=st.toFixed(2)+'$';carritoTotal.textContent=st.toFixed(2)+'$';
         }
         function cambiarCantidad(idT,d){var i=carrito.find(function(x){return x.idConTalla===idT});if(!i)return;i.cantidad+=d;if(i.cantidad<=0)carrito=carrito.filter(function(x){return x.idConTalla!==idT});renderizarCarrito();}
         function eliminarItem(idT){var i=carrito.find(function(x){return x.idConTalla===idT});if(i)mostrarToast(i.nombre+' eliminado');carrito=carrito.filter(function(x){return x.idConTalla!==idT});renderizarCarrito();}
@@ -805,13 +688,8 @@
 
         document.getElementById('btn-comprar').addEventListener('click',function(){
             if(carrito.length===0) return;
-            if(!usuarioLogueado) {
-                cerrarCarrito();
-                mostrarToast('⚠️ Debes ingresar a tu cuenta para comprar');
-                setTimeout(function(){ abrirModalAuth(); }, 500);
-            } else {
-                abrirCheckout();
-            }
+            if(!usuarioLogueado) { cerrarCarrito(); mostrarToast('⚠️ Debes ingresar a tu cuenta para comprar'); setTimeout(function(){ abrirModalAuth(); }, 500); }
+            else { abrirCheckout(); }
         });
 
         var toastTimeout;
