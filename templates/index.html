@@ -427,7 +427,6 @@
                         <option value="Efectivo">💵 Efectivo (Presencial / Depósito)</option>
                         <option value="Pago Movil">📱 Pago Móvil (QR)</option>
                         <option value="Punto de Venta">💳 Punto de Venta (Delivery)</option>
-                        <option value="Zelle">🇺🇸 Zelle (Internacional)</option>
                     </select>
                     <select id="checkout-delivery" required onchange="calcularTotalYMostrarPago()">
                         <option value="">🚚 Método de entrega</option>
@@ -625,7 +624,7 @@
                 document.getElementById('pago-movil-info').style.display = 'block';
                 var qrContainer = document.getElementById('qrcode-container');
                 qrContainer.innerHTML = '';
-                var textoQR = "Pago Movil World Moon | Banco: Venezuela | CI: V-12345678 | Tlf: 04126653899 | Monto: " + totalFinal.toFixed(2) + "$";
+                var textoQR = "Pago Movil World Moon | Banco: bancamiga | CI: V-23714719 | Tlf: 04126023833 | Monto: " + totalFinal.toFixed(2) + "$";
                 new QRCode(qrContainer, { text: textoQR, width: 120, height: 120, colorDark : "#0b0f2e", colorLight : "#ffffff" });
             } else if(pago === 'Efectivo') { document.getElementById('efectivo-info').style.display = 'block'; }
             else if(pago === 'Punto de Venta') { document.getElementById('pos-info').style.display = 'block'; }
@@ -716,4 +715,4 @@
     </script>
 
 </body>
-</html>
+</htm

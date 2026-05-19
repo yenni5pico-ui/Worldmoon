@@ -196,7 +196,7 @@ def checkout():
         comp_text = f"\n📄 *Comprobante:* {data.get('comprobante')}\n📱 *Tlf Origen:* {data.get('tlf_pago')}" if data.get(
             'metodo_pago') == 'Pago Movil' else ""
         mensaje_wa = f"Hola World Moon! 🌙 Pedido #{pedido_id}:\n👤 *Nombre:* {data.get('nombre')}\n📦 *Productos:* {data.get('productos')}\n💰 *Total:* ${data.get('total')}{comp_text}"
-        numero_wa = '5841260238339'
+        numero_wa = '584126023833'
         whatsapp_url = f'https://wa.me/{numero_wa}?text={mensaje_wa}'
 
         return jsonify({'success': True, 'whatsapp_url': whatsapp_url})
